@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        (function () {
+            var d = document.documentElement;
+            try {
+                var t = localStorage.getItem('site-theme');
+                if (t !== 'light' && t !== 'dark') {
+                    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                }
+                d.setAttribute('data-theme', t);
+                d.setAttribute('data-lang', localStorage.getItem('site-lang') === 'zh' ? 'zh' : 'en');
+                d.setAttribute('data-style', 'web');
+            } catch (e) {
+                d.setAttribute('data-theme', 'dark');
+                d.setAttribute('data-lang', 'en');
+                d.setAttribute('data-style', 'web');
+            }
+        })();
+    </script>
+</head>
+<body class="scene-locker">
+
+<div class="scene web-only" aria-hidden="true"></div>
+<div class="mist dream-only" aria-hidden="true"></div>
+<div class="grain dream-only" aria-hidden="true"></div>
+
+<!-- 弹窗页面 -->
+<div class="dialog-page web-only">
+    <div class="dialog-win" role="main">
+
+        <div class="dialog-titlebar">
+            <svg class="dtb-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                <rect x="2" y="3" width="12" height="1" fill="#000"/>
+                <rect x="2" y="4" width="2" height="1" fill="#000"/>
+                <rect x="4" y="4" width="8" height="1" fill="#ffffcc"/>
+                <rect x="12" y="4" width="2" height="1" fill="#000"/>
+                <rect x="2" y="5" width="1" height="1" fill="#000"/>
+                <rect x="3" y="5" width="1" height="1" fill="#ffffcc"/>
+                <rect x="4" y="5" width="2" height="1" fill="#000"/>
+                <rect x="6" y="5" width="4" height="1" fill="#ffffcc"/>
+                <rect x="10" y="5" width="2" height="1" fill="#000"/>
+                <rect x="12" y="5" width="1" height="1" fill="#ffffcc"/>
+                <rect x="13" y="5" width="1" height="1" fill="#000"/>
+                <rect x="2" y="6" width="1" height="1" fill="#000"/>
+                <rect x="3" y="6" width="10" height="1" fill="#ffffcc"/>
+                <rect x="13" y="6" width="1" height="1" fill="#000"/>
+                <rect x="2" y="7" width="12" height="1" fill="#000"/>
+            </svg>
+            <span class="dtb-title lang-en">Contact — Maria Pan</span>
+            <span class="dtb-title lang-zh">联系 — Maria Pan</span>
+            <div class="dtb-btns">
+                <button class="dtb-btn" style="background-image:var(--g-min)" aria-label="Minimize"></button>
+                <button class="dtb-btn" style="background-image:var(--g-max)" aria-label="Maximize"></button>
+                <a href="index.html" class="dtb-btn" style="background-image:var(--g-x)" aria-label="Close"></a>
+            </div>
+        </div>
+
+        <div class="dialog-body">
+
+            <a class="dialog-back" href="index.html">
+                <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">
+                    <rect x="5" y="1" width="1" height="12" fill="currentColor"/>
+                    <rect x="5" y="1" width="5" height="1" fill="currentColor"/>
+                    <rect x="5" y="12" width="5" height="1" fill="currentColor"/>
+                    <rect x="2" y="5" width="1" height="4" fill="currentColor"/>
+                </svg>
+                <span class="lang-en">Back to Desktop</span>
+                <span class="lang-zh">返回桌面</span>
+            </a>
+
+            <h1>
+                <span class="lang-zh">联系</span>
+                <span class="lang-en">Contact</span>
+            </h1>
+
+            <div class="note">
+                <div class="titlebar"><i class="ico ico-mail" aria-hidden="true"></i><span class="tb-text"><span class="lang-zh">联系</span><span class="lang-en">Contact</span></span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></div>
+                <div class="win-body">
+                    <div class="lang-zh">
+                        <h2>如果这里的某句话让你心里动了一下</h2>
+                        <p>或者你只是想找个人聊聊那些说不清的小事——写信给我吧。每封信我都会认真看。</p>
+                    </div>
+                    <div class="lang-en">
+                        <h2>If a sentence here made you feel something</h2>
+                        <p>Or if you just want someone to talk to about the small things that are hard to explain — write to me. I read every letter.</p>
+                    </div>
+                    <a class="email" href="mailto:stupidmaria@foxmail.com">stupidmaria@foxmail.com</a>
+                </div>
+            </div>
+
+        </div><!-- .dialog-body -->
+    </div><!-- .dialog-win -->
+</div><!-- .dialog-page -->
+
+<!-- Dreamcore 内容 -->
+<header id="site-header" class="dream-only"></header>
+<main class="dream-only"></main>
+<footer id="site-footer" class="dream-only"></footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

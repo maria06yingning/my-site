@@ -1,488 +1,427 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quotes</title>
-    <link rel="icon" href="favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-    <script>
-        (function () {
-            var d = document.documentElement;
-            try {
-                var t = localStorage.getItem('site-theme');
-                if (t !== 'light' && t !== 'dark') {
-                    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-                }
-                d.setAttribute('data-theme', t);
-                d.setAttribute('data-lang', localStorage.getItem('site-lang') === 'zh' ? 'zh' : 'en');
-                d.setAttribute('data-style', localStorage.getItem('site-style') === 'dream' ? 'dream' : 'web');
-            } catch (e) {
-                d.setAttribute('data-theme', 'dark');
-                d.setAttribute('data-lang', 'en');
-                d.setAttribute('data-style', 'web');
-            }
-        })();
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c0c0c0">
+  <title>语录 — Maria Pan</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="preload" href="bliss.jpg" as="image">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try {
+      var language = localStorage.getItem('site-lang') === 'en' ? 'en' : 'zh';
+      document.documentElement.dataset.lang = language;
+      document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+    } catch (e) { /* 中文默认值支持离线和禁用存储的浏览器。 */ }
+  </script>
+  <script src="nav.js" defer></script>
+  <script src="power-machine.js" defer></script>
 </head>
-<body class="scene-stairs">
-<div class="scene" aria-hidden="true"><div class="sc-dream dream-only"><svg class="art shaft" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="dgBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-bg1)"/><stop offset="1" style="stop-color:var(--sc-bg2)"/></linearGradient><radialGradient id="dgGlow"><stop offset="0" style="stop-color:var(--sc-glow);stop-opacity:.95"/><stop offset=".45" style="stop-color:var(--sc-glow);stop-opacity:.32"/><stop offset="1" style="stop-color:var(--sc-glow);stop-opacity:0"/></radialGradient><radialGradient id="dgHaze"><stop offset="0" style="stop-color:var(--sc-haze);stop-opacity:.6"/><stop offset="1" style="stop-color:var(--sc-haze);stop-opacity:0"/></radialGradient><linearGradient id="dgWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-water1)"/><stop offset="1" style="stop-color:var(--sc-water2)"/></linearGradient><linearGradient id="dgRay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-light);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--sc-light);stop-opacity:0"/></linearGradient></defs><rect class="bg" width="1600" height="900"/><g class="sway2"><g class="zoom" style="transform-origin:800px 480px"><path class="raT" d="M-240 -260L1840 -260L1674 -142L-74 -142Z"/><path class="raR" d="M1840 -260L1840 1220L1674 1102L1674 -142Z"/><path class="raB" d="M1840 1220L-240 1220L-74 1102L1674 1102Z"/><path class="raL" d="M-240 1220L-240 -260L-74 -142L-74 1102Z"/><path class="tk" stroke-width="2.2" d="M176 -260L276 -142M592 -260L625 -142M1008 -260L975 -142M1424 -260L1324 -142M1840 110L1674 169M1840 480L1674 480M1840 850L1674 791M1424 1220L1324 1102M1008 1220L975 1102M592 1220L625 1102M176 1220L276 1102M-240 850L-74 791M-240 480L-74 480M-240 110L-74 169"/><path class="hrail" stroke-width="4.0" d="M-74 -142L1674 -142L1674 1102L-74 1102Z"/><path class="rbT" d="M-74 -142L1674 -142L1534 -42L66 -42Z"/><path class="rbR" d="M1674 -142L1674 1102L1534 1002L1534 -42Z"/><path class="rbB" d="M1674 1102L-74 1102L66 1002L1534 1002Z"/><path class="rbL" d="M-74 1102L-74 -142L66 -42L66 1002Z"/><path class="tk" stroke-width="1.8" d="M276 -142L360 -42M625 -142L653 -42M975 -142L947 -42M1324 -142L1240 -42M1674 169L1534 219M1674 480L1534 480M1674 791L1534 741M1324 1102L1240 1002M975 1102L947 1002M625 1102L653 1002M276 1102L360 1002M-74 791L66 741M-74 480L66 480M-74 169L66 219"/><path class="hrail" stroke-width="3.4" d="M66 -42L1534 -42L1534 1002L66 1002Z"/><path class="raT" d="M66 -42L1534 -42L1416 41L184 41Z"/><path class="raR" d="M1534 -42L1534 1002L1416 919L1416 41Z"/><path class="raB" d="M1534 1002L66 1002L184 919L1416 919Z"/><path class="raL" d="M66 1002L66 -42L184 41L184 919Z"/><path class="tk" stroke-width="1.6" d="M360 -42L430 41M653 -42L677 41M947 -42L923 41M1240 -42L1170 41M1534 219L1416 261M1534 480L1416 480M1534 741L1416 699M1240 1002L1170 919M947 1002L923 919M653 1002L677 919M360 1002L430 919M66 741L184 699M66 480L184 480M66 219L184 261"/><path class="hrail" stroke-width="2.8" d="M184 41L1416 41L1416 919L184 919Z"/><path class="rbT" d="M184 41L1416 41L1318 112L282 112Z"/><path class="rbR" d="M1416 41L1416 919L1318 848L1318 112Z"/><path class="rbB" d="M1416 919L184 919L282 848L1318 848Z"/><path class="rbL" d="M184 919L184 41L282 112L282 848Z"/><path class="tk" stroke-width="1.3" d="M430 41L489 112M677 41L696 112M923 41L904 112M1170 41L1111 112M1416 261L1318 296M1416 480L1318 480M1416 699L1318 664M1170 919L1111 848M923 919L904 848M677 919L696 848M430 919L489 848M184 699L282 664M184 480L282 480M184 261L282 296"/><path class="hrail" stroke-width="2.4" d="M282 112L1318 112L1318 848L282 848Z"/><path class="raT" d="M282 112L1318 112L1235 171L365 171Z"/><path class="raR" d="M1318 112L1318 848L1235 789L1235 171Z"/><path class="raB" d="M1318 848L282 848L365 789L1235 789Z"/><path class="raL" d="M282 848L282 112L365 171L365 789Z"/><path class="tk" stroke-width="1.1" d="M489 112L539 171M696 112L713 171M904 112L887 171M1111 112L1061 171M1318 296L1235 325M1318 480L1235 480M1318 664L1235 635M1111 848L1061 789M904 848L887 789M696 848L713 789M489 848L539 789M282 664L365 635M282 480L365 480M282 296L365 325"/><path class="hrail" stroke-width="2.0" d="M365 171L1235 171L1235 789L365 789Z"/><path class="rbT" d="M365 171L1235 171L1165 220L435 220Z"/><path class="rbR" d="M1235 171L1235 789L1165 740L1165 220Z"/><path class="rbB" d="M1235 789L365 789L435 740L1165 740Z"/><path class="rbL" d="M365 789L365 171L435 220L435 740Z"/><path class="tk" stroke-width="0.9" d="M539 171L581 220M713 171L727 220M887 171L873 220M1061 171L1019 220M1235 325L1165 350M1235 480L1165 480M1235 635L1165 610M1061 789L1019 740M887 789L873 740M713 789L727 740M539 789L581 740M365 635L435 610M365 480L435 480M365 325L435 350"/><path class="hrail" stroke-width="1.7" d="M435 220L1165 220L1165 740L435 740Z"/><path class="raT" d="M435 220L1165 220L1107 262L493 262Z"/><path class="raR" d="M1165 220L1165 740L1107 698L1107 262Z"/><path class="raB" d="M1165 740L435 740L493 698L1107 698Z"/><path class="raL" d="M435 740L435 220L493 262L493 698Z"/><path class="tk" stroke-width="0.8" d="M581 220L616 262M727 220L739 262M873 220L861 262M1019 220L984 262M1165 350L1107 371M1165 480L1107 480M1165 610L1107 589M1019 740L984 698M873 740L861 698M727 740L739 698M581 740L616 698M435 610L493 589M435 480L493 480M435 350L493 371"/><path class="hrail" stroke-width="1.4" d="M493 262L1107 262L1107 698L493 698Z"/><path class="rbT" d="M493 262L1107 262L1058 297L542 297Z"/><path class="rbR" d="M1107 262L1107 698L1058 663L1058 297Z"/><path class="rbB" d="M1107 698L493 698L542 663L1058 663Z"/><path class="rbL" d="M493 698L493 262L542 297L542 663Z"/><path class="tk" stroke-width="0.6" d="M616 262L645 297M739 262L748 297M861 262L852 297M984 262L955 297M1107 371L1058 388M1107 480L1058 480M1107 589L1058 572M984 698L955 663M861 698L852 663M739 698L748 663M616 698L645 663M493 589L542 572M493 480L542 480M493 371L542 388"/><path class="hrail" stroke-width="1.2" d="M542 297L1058 297L1058 663L542 663Z"/><path class="raT" d="M542 297L1058 297L1017 326L583 326Z"/><path class="raR" d="M1058 297L1058 663L1017 634L1017 326Z"/><path class="raB" d="M1058 663L542 663L583 634L1017 634Z"/><path class="raL" d="M542 663L542 297L583 326L583 634Z"/><path class="tk" stroke-width="0.6" d="M645 297L670 326M748 297L757 326M852 297L843 326M955 297L930 326M1058 388L1017 403M1058 480L1017 480M1058 572L1017 557M955 663L930 634M852 663L843 634M748 663L757 634M645 663L670 634M542 572L583 557M542 480L583 480M542 388L583 403"/><path class="hrail" stroke-width="1.0" d="M583 326L1017 326L1017 634L583 634Z"/><path class="rbT" d="M583 326L1017 326L982 351L618 351Z"/><path class="rbR" d="M1017 326L1017 634L982 609L982 351Z"/><path class="rbB" d="M1017 634L583 634L618 609L982 609Z"/><path class="rbL" d="M583 634L583 326L618 351L618 609Z"/><path class="tk" stroke-width="0.6" d="M670 326L691 351M757 326L764 351M843 326L836 351M930 326L909 351M1017 403L982 415M1017 480L982 480M1017 557L982 545M930 634L909 609M843 634L836 609M757 634L764 609M670 634L691 609M583 557L618 545M583 480L618 480M583 403L618 415"/><path class="hrail" stroke-width="0.8" d="M618 351L982 351L982 609L618 609Z"/><path class="raT" d="M618 351L982 351L953 371L647 371Z"/><path class="raR" d="M982 351L982 609L953 589L953 371Z"/><path class="raB" d="M982 609L618 609L647 589L953 589Z"/><path class="raL" d="M618 609L618 351L647 371L647 589Z"/><path class="tk" stroke-width="0.6" d="M691 351L708 371M764 351L769 371M836 351L831 371M909 351L892 371M982 415L953 426M982 480L953 480M982 545L953 534M909 609L892 589M836 609L831 589M764 609L769 589M691 609L708 589M618 545L647 534M618 480L647 480M618 415L647 426"/><path class="hrail" stroke-width="0.8" d="M647 371L953 371L953 589L647 589Z"/><path class="rbT" d="M647 371L953 371L928 389L672 389Z"/><path class="rbR" d="M953 371L953 589L928 571L928 389Z"/><path class="rbB" d="M953 589L647 589L672 571L928 571Z"/><path class="rbL" d="M647 589L647 371L672 389L672 571Z"/><path class="tk" stroke-width="0.6" d="M708 371L723 389M769 371L774 389M831 371L826 389M892 371L877 389M953 426L928 434M953 480L928 480M953 534L928 526M892 589L877 571M831 589L826 571M769 589L774 571M708 589L723 571M647 534L672 526M647 480L672 480M647 426L672 434"/><path class="hrail" stroke-width="0.8" d="M672 389L928 389L928 571L672 571Z"/><path class="raT" d="M672 389L928 389L908 403L692 403Z"/><path class="raR" d="M928 389L928 571L908 557L908 403Z"/><path class="raB" d="M928 571L672 571L692 557L908 557Z"/><path class="raL" d="M672 571L672 389L692 403L692 557Z"/><path class="tk" stroke-width="0.6" d="M723 389L735 403M774 389L778 403M826 389L822 403M877 389L865 403M928 434L908 442M928 480L908 480M928 526L908 518M877 571L865 557M826 571L822 557M774 571L778 557M723 571L735 557M672 526L692 518M672 480L692 480M672 434L692 442"/><path class="hrail" stroke-width="0.8" d="M692 403L908 403L908 557L692 557Z"/><path class="rbT" d="M692 403L908 403L891 416L709 416Z"/><path class="rbR" d="M908 403L908 557L891 544L891 416Z"/><path class="rbB" d="M908 557L692 557L709 544L891 544Z"/><path class="rbL" d="M692 557L692 403L709 416L709 544Z"/><path class="tk" stroke-width="0.6" d="M735 403L746 416M778 403L782 416M822 403L818 416M865 403L854 416M908 442L891 448M908 480L891 480M908 518L891 512M865 557L854 544M822 557L818 544M778 557L782 544M735 557L746 544M692 518L709 512M692 480L709 480M692 442L709 448"/><path class="hrail" stroke-width="0.8" d="M709 416L891 416L891 544L709 544Z"/><path class="raT" d="M709 416L891 416L876 426L724 426Z"/><path class="raR" d="M891 416L891 544L876 534L876 426Z"/><path class="raB" d="M891 544L709 544L724 534L876 534Z"/><path class="raL" d="M709 544L709 416L724 426L724 534Z"/><path class="tk" stroke-width="0.6" d="M746 416L754 426M782 416L785 426M818 416L815 426M854 416L846 426M891 448L876 453M891 480L876 480M891 512L876 507M854 544L846 534M818 544L815 534M782 544L785 534M746 544L754 534M709 512L724 507M709 480L724 480M709 448L724 453"/><path class="hrail" stroke-width="0.8" d="M724 426L876 426L876 534L724 534Z"/><path class="rbT" d="M724 426L876 426L864 435L736 435Z"/><path class="rbR" d="M876 426L876 534L864 525L864 435Z"/><path class="rbB" d="M876 534L724 534L736 525L864 525Z"/><path class="rbL" d="M724 534L724 426L736 435L736 525Z"/><path class="tk" stroke-width="0.6" d="M754 426L762 435M785 426L787 435M815 426L813 435M846 426L838 435M876 453L864 457M876 480L864 480M876 507L864 503M846 534L838 525M815 534L813 525M785 534L787 525M754 534L762 525M724 507L736 503M724 480L736 480M724 453L736 457"/><path class="hrail" stroke-width="0.8" d="M736 435L864 435L864 525L736 525Z"/><path class="raT" d="M736 435L864 435L854 442L746 442Z"/><path class="raR" d="M864 435L864 525L854 518L854 442Z"/><path class="raB" d="M864 525L736 525L746 518L854 518Z"/><path class="raL" d="M736 525L736 435L746 442L746 518Z"/><path class="tk" stroke-width="0.6" d="M762 435L768 442M787 435L789 442M813 435L811 442M838 435L832 442M864 457L854 461M864 480L854 480M864 503L854 499M838 525L832 518M813 525L811 518M787 525L789 518M762 525L768 518M736 503L746 499M736 480L746 480M736 457L746 461"/><path class="hrail" stroke-width="0.8" d="M746 442L854 442L854 518L746 518Z"/><path class="rbT" d="M746 442L854 442L845 448L755 448Z"/><path class="rbR" d="M854 442L854 518L845 512L845 448Z"/><path class="rbB" d="M854 518L746 518L755 512L845 512Z"/><path class="rbL" d="M746 518L746 442L755 448L755 512Z"/><path class="tk" stroke-width="0.6" d="M768 442L773 448M789 442L791 448M811 442L809 448M832 442L827 448M854 461L845 464M854 480L845 480M854 499L845 496M832 518L827 512M811 518L809 512M789 518L791 512M768 518L773 512M746 499L755 496M746 480L755 480M746 461L755 464"/><path class="hrail" stroke-width="0.8" d="M755 448L845 448L845 512L755 512Z"/><path class="raT" d="M755 448L845 448L838 453L762 453Z"/><path class="raR" d="M845 448L845 512L838 507L838 453Z"/><path class="raB" d="M845 512L755 512L762 507L838 507Z"/><path class="raL" d="M755 512L755 448L762 453L762 507Z"/><path class="tk" stroke-width="0.6" d="M773 448L777 453M791 448L792 453M809 448L808 453M827 448L823 453M845 464L838 467M845 480L838 480M845 496L838 493M827 512L823 507M809 512L808 507M791 512L792 507M773 512L777 507M755 496L762 493M755 480L762 480M755 464L762 467"/><path class="hrail" stroke-width="0.8" d="M762 453L838 453L838 507L762 507Z"/><path class="rbT" d="M762 453L838 453L832 457L768 457Z"/><path class="rbR" d="M838 453L838 507L832 503L832 457Z"/><path class="rbB" d="M838 507L762 507L768 503L832 503Z"/><path class="rbL" d="M762 507L762 453L768 457L768 503Z"/><path class="tk" stroke-width="0.6" d="M777 453L781 457M792 453L794 457M808 453L806 457M823 453L819 457M838 467L832 469M838 480L832 480M838 493L832 491M823 507L819 503M808 507L806 503M792 507L794 503M777 507L781 503M762 493L768 491M762 480L768 480M762 467L768 469"/><path class="hrail" stroke-width="0.8" d="M768 457L832 457L832 503L768 503Z"/><path class="raT" d="M768 457L832 457L827 461L773 461Z"/><path class="raR" d="M832 457L832 503L827 499L827 461Z"/><path class="raB" d="M832 503L768 503L773 499L827 499Z"/><path class="raL" d="M768 503L768 457L773 461L773 499Z"/><path class="tk" stroke-width="0.6" d="M781 457L784 461M794 457L795 461M806 457L805 461M819 457L816 461M832 469L827 470M832 480L827 480M832 491L827 490M819 503L816 499M806 503L805 499M794 503L795 499M781 503L784 499M768 491L773 490M768 480L773 480M768 469L773 470"/><path class="hrail" stroke-width="0.8" d="M773 461L827 461L827 499L773 499Z"/><path class="rbT" d="M773 461L827 461L822 464L778 464Z"/><path class="rbR" d="M827 461L827 499L822 496L822 464Z"/><path class="rbB" d="M827 499L773 499L778 496L822 496Z"/><path class="rbL" d="M773 499L773 461L778 464L778 496Z"/><path class="tk" stroke-width="0.6" d="M784 461L787 464M795 461L796 464M805 461L804 464M816 461L813 464M827 470L822 472M827 480L822 480M827 490L822 488M816 499L813 496M805 499L804 496M795 499L796 496M784 499L787 496M773 490L778 488M773 480L778 480M773 470L778 472"/><path class="hrail" stroke-width="0.8" d="M778 464L822 464L822 496L778 496Z"/><path class="raT" d="M778 464L822 464L819 467L781 467Z"/><path class="raR" d="M822 464L822 496L819 493L819 467Z"/><path class="raB" d="M822 496L778 496L781 493L819 493Z"/><path class="raL" d="M778 496L778 464L781 467L781 493Z"/><path class="tk" stroke-width="0.6" d="M787 464L789 467M796 464L796 467M804 464L804 467M813 464L811 467M822 472L819 473M822 480L819 480M822 488L819 487M813 496L811 493M804 496L804 493M796 496L796 493M787 496L789 493M778 488L781 487M778 480L781 480M778 472L781 473"/><path class="hrail" stroke-width="0.8" d="M781 467L819 467L819 493L781 493Z"/><path class="rbT" d="M781 467L819 467L816 469L784 469Z"/><path class="rbR" d="M819 467L819 493L816 491L816 469Z"/><path class="rbB" d="M819 493L781 493L784 491L816 491Z"/><path class="rbL" d="M781 493L781 467L784 469L784 491Z"/><path class="tk" stroke-width="0.6" d="M789 467L790 469M796 467L797 469M804 467L803 469M811 467L810 469M819 473L816 474M819 480L816 480M819 487L816 486M811 493L810 491M804 493L803 491M796 493L797 491M789 493L790 491M781 487L784 486M781 480L784 480M781 473L784 474"/><path class="hrail" stroke-width="0.8" d="M784 469L816 469L816 491L784 491Z"/></g></g><circle class="glowbig pulse" cx="800" cy="480" r="300" fill="url(#dgGlow)"/><circle class="corelight" cx="800" cy="480" r="46"/><ellipse class="haze" cx="800" cy="480" rx="820" ry="470" fill="url(#dgHaze)"/></svg><svg class="art floaters" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="dgBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-bg1)"/><stop offset="1" style="stop-color:var(--sc-bg2)"/></linearGradient><radialGradient id="dgGlow"><stop offset="0" style="stop-color:var(--sc-glow);stop-opacity:.95"/><stop offset=".45" style="stop-color:var(--sc-glow);stop-opacity:.32"/><stop offset="1" style="stop-color:var(--sc-glow);stop-opacity:0"/></radialGradient><radialGradient id="dgHaze"><stop offset="0" style="stop-color:var(--sc-haze);stop-opacity:.6"/><stop offset="1" style="stop-color:var(--sc-haze);stop-opacity:0"/></radialGradient><linearGradient id="dgWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-water1)"/><stop offset="1" style="stop-color:var(--sc-water2)"/></linearGradient><linearGradient id="dgRay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sc-light);stop-opacity:.5"/><stop offset="1" style="stop-color:var(--sc-light);stop-opacity:0"/></linearGradient></defs><circle class="mote" cx="378" cy="180" r="3.4" style="animation-duration:16s;animation-delay:-1s"/><circle class="mote" cx="643" cy="816" r="4.8" style="animation-duration:26s;animation-delay:-6s"/><circle class="mote" cx="859" cy="316" r="2.6" style="animation-duration:16s;animation-delay:-3s"/><circle class="mote" cx="1484" cy="747" r="4.8" style="animation-duration:27s;animation-delay:-5s"/><circle class="mote" cx="496" cy="589" r="4.6" style="animation-duration:28s;animation-delay:-24s"/><circle class="mote" cx="139" cy="573" r="4.4" style="animation-duration:22s;animation-delay:-4s"/><circle class="mote" cx="758" cy="170" r="5.3" style="animation-duration:28s;animation-delay:-15s"/><circle class="mote" cx="480" cy="809" r="4.0" style="animation-duration:28s;animation-delay:-24s"/><circle class="mote" cx="813" cy="423" r="4.1" style="animation-duration:21s;animation-delay:-3s"/><circle class="mote" cx="488" cy="734" r="2.2" style="animation-duration:15s;animation-delay:-9s"/><circle class="mote" cx="449" cy="517" r="3.6" style="animation-duration:19s;animation-delay:-19s"/><circle class="mote" cx="313" cy="422" r="2.7" style="animation-duration:24s;animation-delay:-7s"/><circle class="mote" cx="569" cy="683" r="3.1" style="animation-duration:23s;animation-delay:-21s"/><circle class="mote" cx="162" cy="148" r="2.8" style="animation-duration:26s;animation-delay:-16s"/><circle class="mote" cx="380" cy="358" r="2.6" style="animation-duration:21s;animation-delay:-1s"/><circle class="mote" cx="1116" cy="799" r="5.3" style="animation-duration:26s;animation-delay:-25s"/><circle class="mote" cx="29" cy="325" r="5.4" style="animation-duration:26s;animation-delay:-11s"/><circle class="mote" cx="1509" cy="584" r="4.9" style="animation-duration:19s;animation-delay:-4s"/></svg></div><div class="sc-web web-only"><div class="tilewrap"><svg class="art tile" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" focusable="false"><defs><pattern id="wpSwirl" width="128" height="128" patternUnits="userSpaceOnUse"><rect width="128" height="128" class="pbg"/><circle class="pa" cx="-128" cy="-128" r="14"/><circle class="pb" cx="-128" cy="-128" r="30"/><circle class="pa" cx="-128" cy="-128" r="46"/><circle class="pb" cx="-128" cy="-128" r="62"/><circle class="pa" cx="-128" cy="-128" r="78"/><circle class="pa" cx="-64" cy="-64" r="14"/><circle class="pb" cx="-64" cy="-64" r="30"/><circle class="pa" cx="-64" cy="-64" r="46"/><circle class="pb" cx="-64" cy="-64" r="62"/><circle class="pa" cx="-64" cy="-64" r="78"/><circle class="pa" cx="-128" cy="0" r="14"/><circle class="pb" cx="-128" cy="0" r="30"/><circle class="pa" cx="-128" cy="0" r="46"/><circle class="pb" cx="-128" cy="0" r="62"/><circle class="pa" cx="-128" cy="0" r="78"/><circle class="pa" cx="-64" cy="64" r="14"/><circle class="pb" cx="-64" cy="64" r="30"/><circle class="pa" cx="-64" cy="64" r="46"/><circle class="pb" cx="-64" cy="64" r="62"/><circle class="pa" cx="-64" cy="64" r="78"/><circle class="pa" cx="-128" cy="128" r="14"/><circle class="pb" cx="-128" cy="128" r="30"/><circle class="pa" cx="-128" cy="128" r="46"/><circle class="pb" cx="-128" cy="128" r="62"/><circle class="pa" cx="-128" cy="128" r="78"/><circle class="pa" cx="-64" cy="192" r="14"/><circle class="pb" cx="-64" cy="192" r="30"/><circle class="pa" cx="-64" cy="192" r="46"/><circle class="pb" cx="-64" cy="192" r="62"/><circle class="pa" cx="-64" cy="192" r="78"/><circle class="pa" cx="0" cy="-128" r="14"/><circle class="pb" cx="0" cy="-128" r="30"/><circle class="pa" cx="0" cy="-128" r="46"/><circle class="pb" cx="0" cy="-128" r="62"/><circle class="pa" cx="0" cy="-128" r="78"/><circle class="pa" cx="64" cy="-64" r="14"/><circle class="pb" cx="64" cy="-64" r="30"/><circle class="pa" cx="64" cy="-64" r="46"/><circle class="pb" cx="64" cy="-64" r="62"/><circle class="pa" cx="64" cy="-64" r="78"/><circle class="pa" cx="0" cy="0" r="14"/><circle class="pb" cx="0" cy="0" r="30"/><circle class="pa" cx="0" cy="0" r="46"/><circle class="pb" cx="0" cy="0" r="62"/><circle class="pa" cx="0" cy="0" r="78"/><circle class="pa" cx="64" cy="64" r="14"/><circle class="pb" cx="64" cy="64" r="30"/><circle class="pa" cx="64" cy="64" r="46"/><circle class="pb" cx="64" cy="64" r="62"/><circle class="pa" cx="64" cy="64" r="78"/><circle class="pa" cx="0" cy="128" r="14"/><circle class="pb" cx="0" cy="128" r="30"/><circle class="pa" cx="0" cy="128" r="46"/><circle class="pb" cx="0" cy="128" r="62"/><circle class="pa" cx="0" cy="128" r="78"/><circle class="pa" cx="64" cy="192" r="14"/><circle class="pb" cx="64" cy="192" r="30"/><circle class="pa" cx="64" cy="192" r="46"/><circle class="pb" cx="64" cy="192" r="62"/><circle class="pa" cx="64" cy="192" r="78"/><circle class="pa" cx="128" cy="-128" r="14"/><circle class="pb" cx="128" cy="-128" r="30"/><circle class="pa" cx="128" cy="-128" r="46"/><circle class="pb" cx="128" cy="-128" r="62"/><circle class="pa" cx="128" cy="-128" r="78"/><circle class="pa" cx="192" cy="-64" r="14"/><circle class="pb" cx="192" cy="-64" r="30"/><circle class="pa" cx="192" cy="-64" r="46"/><circle class="pb" cx="192" cy="-64" r="62"/><circle class="pa" cx="192" cy="-64" r="78"/><circle class="pa" cx="128" cy="0" r="14"/><circle class="pb" cx="128" cy="0" r="30"/><circle class="pa" cx="128" cy="0" r="46"/><circle class="pb" cx="128" cy="0" r="62"/><circle class="pa" cx="128" cy="0" r="78"/><circle class="pa" cx="192" cy="64" r="14"/><circle class="pb" cx="192" cy="64" r="30"/><circle class="pa" cx="192" cy="64" r="46"/><circle class="pb" cx="192" cy="64" r="62"/><circle class="pa" cx="192" cy="64" r="78"/><circle class="pa" cx="128" cy="128" r="14"/><circle class="pb" cx="128" cy="128" r="30"/><circle class="pa" cx="128" cy="128" r="46"/><circle class="pb" cx="128" cy="128" r="62"/><circle class="pa" cx="128" cy="128" r="78"/><circle class="pa" cx="192" cy="192" r="14"/><circle class="pb" cx="192" cy="192" r="30"/><circle class="pa" cx="192" cy="192" r="46"/><circle class="pb" cx="192" cy="192" r="62"/><circle class="pa" cx="192" cy="192" r="78"/></pattern></defs><rect width="100%" height="100%" fill="url(#wpSwirl)"/></svg></div><div class="tile-vig"></div></div></div>
-<div class="mist dream-only" aria-hidden="true"></div>
-<div class="grain dream-only" aria-hidden="true"></div>
-<div class="scan web-only" aria-hidden="true"></div>
+<body class="page-quote">
+<a class="skip-link" href="#content">跳至内容</a>
+<div class="computer-stage">
+  <div class="computer">
+    <div class="monitor">
+      <div class="screen-rim">
+        <div class="screen">
+          <img class="wallpaper" src="bliss.jpg" alt="" fetchpriority="high" decoding="async">
+          <div class="crt-glass" aria-hidden="true"></div>
+<div class="dialog-page" id="content">
+    <div class="dialog-win" role="main" aria-label="语录">
 
-<header id="site-header"></header>
+        <!-- 标题栏 -->
+        <div class="dialog-titlebar">
+            <svg class="dtb-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                <rect x="2" y="1" width="12" height="14" fill="#ffffcc"/>
+                <rect x="2" y="1" width="12" height="3" fill="#c0c0c0"/>
+                <rect x="3" y="5" width="10" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="7" width="8" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="9" width="10" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="11" width="7" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="4" y="2" width="8" height="1" fill="#000080"/>
+            </svg>
+            <span class="dtb-title lang-en">Quotes — Maria Pan</span>
+            <span class="dtb-title lang-zh">语录 — Maria Pan</span>
+            <div class="dtb-btns">
+                <button class="dtb-btn" style="background-image:var(--g-min)" type="button" data-window="minimize" aria-label="最小化" title="最小化"></button>
+                <button class="dtb-btn" style="background-image:var(--g-max)" type="button" data-window="maximize" aria-label="最大化" title="最大化" aria-pressed="false"></button>
+                <a href="index.html" class="dtb-btn" style="background-image:var(--g-x)" aria-label="关闭并返回首页" title="关闭并返回首页"></a>
+            </div>
+        </div>
 
-<main class="wide">
+        <!-- 内容 -->
+        <div class="dialog-body">
 
-    <div class="page-head">
-        <div>
+            <!-- 返回按钮 -->
+            <a class="dialog-back" href="index.html">
+                <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">
+                    <rect x="5" y="1" width="1" height="12" fill="currentColor"/>
+                    <rect x="5" y="1" width="5" height="1" fill="currentColor"/>
+                    <rect x="5" y="12" width="5" height="1" fill="currentColor"/>
+                    <rect x="3" y="3" width="1" height="1" fill="currentColor"/>
+                    <rect x="4" y="3" width="1" height="1" fill="currentColor"/>
+                    <rect x="3" y="4" width="1" height="1" fill="currentColor"/>
+                    <rect x="2" y="5" width="1" height="4" fill="currentColor"/>
+                    <rect x="3" y="10" width="1" height="1" fill="currentColor"/>
+                    <rect x="4" y="10" width="1" height="1" fill="currentColor"/>
+                    <rect x="5" y="11" width="1" height="1" fill="currentColor"/>
+                </svg>
+                <span class="lang-en">Back to Desktop</span>
+                <span class="lang-zh">返回桌面</span>
+            </a>
+
             <h1>
                 <span class="lang-zh">语录</span>
                 <span class="lang-en">Quotes</span>
             </h1>
-            <p class="lede lang-zh">轻触卡片，展开每一句话。</p>
-            <p class="lede lang-en">Tap a card to read the quote.</p>
+            <p class="lede lang-zh">每一句话，都是一个打开的窗口。点击蓝色标题栏可收起。</p>
+            <p class="lede lang-en">A small window for every thought. Click a blue title bar to fold it away.</p>
+
+            <div class="fog-meter">
+                <span class="mono">
+                    <span class="lang-zh">已展开</span>
+                    <span class="lang-en">opened</span>
+                </span>
+                <b id="fog-count">20 / 20</b>
+                <button class="btn-ghost" id="fog-all" type="button">
+                    <span class="lang-zh">全部收起</span>
+                    <span class="lang-en">close all</span>
+                </button>
+            </div>
+
+            <div class="descent">
+
+                <!-- 01 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">01</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>We never love anyone. What we love is the idea we have of someone. It's our own concept — our own selves — that we love.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我们从未真正爱过谁。我们爱的，是我们对某人的想象。那是我们自己的观念，是另一个自我。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 02 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">02</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">埃米尔·齐奥朗</span><span class="lang-en">Emil M. Cioran</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The same feeling of not belonging, of futility, wherever I go: I pretend interest in what matters nothing to me, I bestir myself mechanically or out of charity, without ever being caught up, without ever being somewhere. What attracts me is elsewhere, and I don't know where that elsewhere is.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>无论我走到哪里，那种格格不入、无所事事的感觉始终如一：我假装对自己毫不在意的事物有兴趣，机械地或出于善意地打起精神，却从未真正投入，从未真正在场。吸引我的总是在别处，而我不知道那别处在何方。</p></blockquote></div>
+                        <footer><cite>Emil M. Cioran</cite> · <span class="source">The Trouble With Being Born</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 03 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">03</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">埃米尔·齐奥朗</span><span class="lang-en">Emil M. Cioran</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The fact that life has no meaning is a reason to live — moreover, the only one.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>生活本无意义——这恰恰是活下去的理由，唯一的理由。</p></blockquote></div>
+                        <footer><cite>Emil M. Cioran</cite> · <span class="source">Anathemas and Admirations</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 04 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">04</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>I wasn't meant for reality, but life came and found me.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我本不属于现实，可生活还是找到了我。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 05 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">05</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Everything around me is evaporating. My whole life, my memories, my imagination and its contents, my personality — it's all evaporating. I continuously feel that I was someone else, that I felt something else, that I thought something else. What I'm attending here is a show with another set. And the show I'm attending is myself.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我周围的一切都在蒸发。我的整个人生，我的记忆，我的想象与其中的一切，我的个性——都在蒸发。我不断感到，自己曾是另一个人，曾感受过别的东西，曾思考过别的事。我此刻参与的，是另一套布景的演出。而这场演出，正是我自己。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 06 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">06</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The feelings that hurt most, the emotions that sting most, are those that are absurd — the longing for impossible things, precisely because they are impossible; nostalgia for what never was; the desire for what could have been; regret over not being someone else; dissatisfaction with the world's existence.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>最伤人的感受，最刺人的情绪，恰恰是那些荒诞的——对不可能之事的渴望，正因其不可能；从未存在之物的乡愁；本可以发生之事的心愿；未能成为他人的遗憾；对世界存在本身的不满。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 07 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">07</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">简媜</span><span class="lang-en">Chien Chen</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>My obstinacy does not arise from reproach toward any of the realities of your life; rather, it is my keeping of an unwavering faith with my own life. You are so beautiful — you have always been more beautiful than I.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我的固执不是因为对你任何一桩现实的责难，而是对自己个我生命忠贞不二的守信。你甚美丽，你一向甚我美丽。</p></blockquote></div>
+                        <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 08 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">08</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">简媜</span><span class="lang-en">Chien Chen</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>In my heart, you have always been a noble soul, one whom I deeply revere. The longer I know you, the more you feel like a sanctuary of serene joy along my life's journey.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>在我心目中，你一直是个尊贵的灵魂，为我所景仰。认识你愈久，愈觉得你是我人生行路中一处清喜的水泽。</p></blockquote></div>
+                        <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 09 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">09</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">双雪涛</span><span class="lang-en">Shuang Xuetao</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>She said, "Because you are about to forget me." I replied, "I haven't. I have only put you in a deeper place." "Where is this deeper place?" she asked. I said, "It is on the very edge of oblivion — where you can never be forgotten."</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>她说：「因为你要把我忘了。」我说：「我没有，我只是把你放在了更深的地方。」她说：「更深的地方是哪里？」我说：「是忘记的边缘——可永远忘不了，这就是最深的地方。」</p></blockquote></div>
+                        <footer><cite>双雪涛 Shuang Xuetao</cite> · <span class="source">《平原上的摩西》 Moses on the Plain</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 10 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">10</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">李商隐</span><span class="lang-en">Li Shangyin</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Did such a feeling need to look back from today? Even at that time it was already a lost way.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>此情可待成追忆，只是当时已惘然。</p></blockquote></div>
+                        <footer><cite>李商隐 Li Shangyin</cite> · <span class="source">《锦瑟》 The Patterned Lute</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 11 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">11</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">露比·考尔</span><span class="lang-en">Rupi Kaur</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>People go but how they left always stays.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>人会离开，可他们离去的方式，总留下点什么。</p></blockquote></div>
+                        <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 12 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">12</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">贾浅浅</span><span class="lang-en">Jia Qianqian</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>My body is my own weather; the entire steppe hears the pain of my bursting bloom. The wind has finally arrived. I am ready to conceive.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我的身体就是我的天气，整个草原都听见了我绽开着的疼。风终于来了，我准备怀孕。</p></blockquote></div>
+                        <footer><cite>贾浅浅 Jia Qianqian</cite> · <span class="source">《开花》 Blossoming</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 13 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">13</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">露比·考尔</span><span class="lang-en">Rupi Kaur</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Loneliness is a sign you are in desperate need of yourself.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>孤独，是你迫切需要自己的信号。</p></blockquote></div>
+                        <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 14 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">14</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>And my heart is a little larger than the entire universe.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>而我的心，比整个宇宙还要稍稍大一点。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">A Little Larger Than the Entire Universe</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 15 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">15</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">窦靖童</span><span class="lang-en">Leah Dou</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Do you believe that magic walks this earth? Together, we can find it too.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>你相信这世界有魔法吗？我们也可以一起找到它。</p></blockquote></div>
+                        <footer><cite>窦靖童 Leah Dou</cite> · <span class="source">《同一个天空》 Under the Same Sky</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 16 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">16</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">声音玩具</span><span class="lang-en">Sound Toy</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Until one day, I am strong enough to face reality, sharp as a razor, yet it can no longer break my heart.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>直到某一天我足够坚强，直面现实如剃刀般锋利，却再也不能破碎我的心。</p></blockquote></div>
+                        <footer><cite>声音玩具 Sound Toy</cite> · <span class="source">《你的城市》 Your City</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 17 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">17</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">狄兰·托马斯</span><span class="lang-en">Dylan Thomas</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Do not go gentle into that good night.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>不要温和地走进那个良夜。</p></blockquote></div>
+                        <footer><cite>Dylan Thomas</cite> · <span class="source">Do Not Go Gentle Into That Good Night</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 18 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">18</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">林芯仪</span><span class="lang-en">Shino Lin</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>So you have been living inside my body all along, watching over the memories of us.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>原来你就住在我的身体，守护我的回忆。</p></blockquote></div>
+                        <footer><cite>Shino Lin</cite> · <span class="source">Tempting Heart</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 19 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">19</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">卢广仲</span><span class="lang-en">Crowd Lu</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>I look up, only to find the crying stars are abandoning me. Please hug me, in case I happen to fall.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>抬起头才发现流眼泪的星星正在放弃我，请拥抱我，万一我不小心坠落。</p></blockquote></div>
+                        <footer><cite>Crowd Lu</cite> · <span class="source">Adulting</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 20 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">20</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">斯蒂芬·茨威格</span><span class="lang-en">Stefan Zweig</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>She did not know that fate never gives anything for free, and that it always leaves a hidden bill, even in the luckiest of times.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>她不知道，命运从不免费赠予任何东西；哪怕在最幸运的时候，它也总会留下一笔隐藏的账单。</p></blockquote></div>
+                        <footer><cite>Stefan Zweig</cite> · <span class="source">Marie Antoinette: The Portrait of an Average Woman</span></footer>
+                    </div></div></div>
+                </article>
+
+            </div><!-- .descent -->
+        </div><!-- .dialog-body -->
+<div class="window-status"><span class="lang-zh">就绪</span><span class="lang-en">Ready</span></div>
+    </div><!-- .dialog-win -->
+</div><!-- .dialog-page -->
+
+
+          <header id="site-header">
+<nav class="taskbar" aria-label="主导航">
+  <button class="start-label" type="button" data-machine-start aria-label="开始 / Start"><i class="ico ico-flag" aria-hidden="true"></i><span class="start-word lang-zh">开始</span><span class="start-word lang-en">Start</span></button>
+  <span class="taskbar-divider" aria-hidden="true"></span>
+  <ul class="task-links">
+    <li><a href="index.html" data-page="index.html"><i class="ico ico-pc" aria-hidden="true"></i><span class="lang-zh">首页</span><span class="lang-en">Home</span></a></li>
+    <li><a href="quote.html" data-page="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a></li>
+    <li><a href="project.html" data-page="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a></li>
+    <li><a href="contact.html" data-page="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>
+  </ul>
+  <div class="system-tray">
+    <div class="lang-toggle" role="group" aria-label="语言"><button type="button" data-lang="zh" aria-label="中文">中</button><button type="button" data-lang="en" aria-label="English">EN</button></div>
+    <time class="clock" aria-label="本地时间">--:--</time>
+  </div>
+</nav>
+          </header>
         </div>
-        <div class="fog-meter">
-            <span class="mono">
-                <span class="lang-zh">已展开</span>
-                <span class="lang-en">opened</span>
-            </span>
-            <b id="fog-count">00 / 20</b>
-            <button class="btn-ghost" id="fog-all" type="button">
-                <span class="lang-zh">全部展开</span>
-                <span class="lang-en">open all</span>
-            </button>
-        </div>
+      </div>
+      <div class="monitor-chin"><span class="monitor-brand">MARIA</span><div class="monitor-hardware"><span class="vents"></span><span class="power-led" aria-hidden="true"></span><button class="power-mark" type="button" data-machine-power aria-label="电源：请求关机" title="电源" aria-pressed="true">⏻</button></div></div>
     </div>
-
-    <div class="descent">
-
-        <!-- 01 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">01</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">费尔南多·佩索阿</span>
-                    <span class="lang-en">Fernando Pessoa</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>We never love anyone. What we love is the idea we have of someone. It's our own concept — our own selves — that we love.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>我们从未真正爱过谁。我们爱的，是我们对某人的想象。那是我们自己的观念，是另一个自我。</p></blockquote></div>
-                <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 02 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">02</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">埃米尔·齐奥朗</span>
-                    <span class="lang-en">Emil M. Cioran</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>The same feeling of not belonging, of futility, wherever I go: I pretend interest in what matters nothing to me, I bestir myself mechanically or out of charity, without ever being caught up, without ever being somewhere. What attracts me is elsewhere, and I don't know where that elsewhere is.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>无论我走到哪里，那种格格不入、无所事事的感觉始终如一：我假装对自己毫不在意的事物有兴趣，机械地或出于善意地打起精神，却从未真正投入，从未真正在场。吸引我的总是在别处，而我不知道那别处在何方。</p></blockquote></div>
-                <footer><cite>Emil M. Cioran</cite> · <span class="source">The Trouble With Being Born</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 03 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">03</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">埃米尔·齐奥朗</span>
-                    <span class="lang-en">Emil M. Cioran</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>The fact that life has no meaning is a reason to live — moreover, the only one.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>生活本无意义——这恰恰是活下去的理由，唯一的理由。</p></blockquote></div>
-                <footer><cite>Emil M. Cioran</cite> · <span class="source">Anathemas and Admirations</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 04 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">04</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">费尔南多·佩索阿</span>
-                    <span class="lang-en">Fernando Pessoa</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>I wasn't meant for reality, but life came and found me.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>我本不属于现实，可生活还是找到了我。</p></blockquote></div>
-                <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 05 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">05</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">费尔南多·佩索阿</span>
-                    <span class="lang-en">Fernando Pessoa</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Everything around me is evaporating. My whole life, my memories, my imagination and its contents, my personality — it's all evaporating. I continuously feel that I was someone else, that I felt something else, that I thought something else. What I'm attending here is a show with another set. And the show I'm attending is myself.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>我周围的一切都在蒸发。我的整个人生，我的记忆，我的想象与其中的一切，我的个性——都在蒸发。我不断感到，自己曾是另一个人，曾感受过别的东西，曾思考过别的事。我此刻参与的，是另一套布景的演出。而这场演出，正是我自己。</p></blockquote></div>
-                <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 06 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">06</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">费尔南多·佩索阿</span>
-                    <span class="lang-en">Fernando Pessoa</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>The feelings that hurt most, the emotions that sting most, are those that are absurd — the longing for impossible things, precisely because they are impossible; nostalgia for what never was; the desire for what could have been; regret over not being someone else; dissatisfaction with the world's existence. All these half-tones of the soul's consciousness create in us a painful landscape, an eternal sunset of what we are.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>最伤人的感受，最刺人的情绪，恰恰是那些荒诞的——对不可能之事的渴望，正因其不可能；从未存在之物的乡愁；本可以发生之事的心愿；未能成为他人的遗憾；对世界存在本身的不满。这些灵魂意识的半音，在我们心里造出一片苦痛的风景——一场属于我们自己的永恒日落。</p></blockquote></div>
-                <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 07 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">07</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">简媜</span>
-                    <span class="lang-en">Chien Chen</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>My obstinacy does not arise from reproach toward any of the realities of your life; rather, it is my keeping of an unwavering faith with my own life. You are so beautiful — you have always been more beautiful than I.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>我的固执不是因为对你任何一桩现实的责难，而是对自己个我生命忠贞不二的守信。你甚美丽，你一向甚我美丽。</p></blockquote></div>
-                <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 08 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">08</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">简媜</span>
-                    <span class="lang-en">Chien Chen</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>In my heart, you have always been a noble soul, one whom I deeply revere. The longer I know you, the more you feel like a sanctuary of serene joy along my life's journey. For you, I have endured much hardship, though I shall leave those unmentioned. I know all too well the difficulties that lie between us; hence, I dared not harbor any expectations. Time and again, I sought to forget and be forgotten by the world, yet we would always quietly meet again when all paths seemed to end — reckoned in truth, it is a form of mutual reluctance to let go.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>在我心目中，你一直是个尊贵的灵魂，为我所景仰。认识你愈久，愈觉得你是我人生行路中一处清喜的水泽。为了你，我吃过不少苦，这些都不提。我太清楚存在与我们之间的困难，遂不敢有所等待，几次想忘于世，总是在山穷水尽处又悄然相见，算来即是一种不舍。</p></blockquote></div>
-                <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 09 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">09</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">双雪涛</span>
-                    <span class="lang-en">Shuang Xuetao</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>She said, "Because you are about to forget me."<br>I replied, "I haven't. I have only put you in a deeper place."<br>"Where is this deeper place?" she asked.<br>I said, "It is on the very edge of oblivion — where you can never be forgotten. That is the deepest place of all."</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>她说：「因为你要把我忘了。」<br>我说：「我没有，我只是把你放在了更深的地方。」<br>她说：「更深的地方是哪里？」<br>我说：「是忘记的边缘——可永远忘不了，这就是最深的地方。」</p></blockquote></div>
-                <footer><cite>双雪涛 Shuang Xuetao</cite> · <span class="source">《平原上的摩西》 Moses on the Plain</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 10 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">10</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">李商隐</span>
-                    <span class="lang-en">Li Shangyin</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Did such a feeling need to look back from today?<br>Even at that time it was already a lost way.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>此情可待成追忆，<br>只是当时已惘然。</p></blockquote></div>
-                <footer><cite>李商隐 Li Shangyin</cite> · <span class="source">《锦瑟》 The Patterned Lute</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 11 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">11</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">露比·考尔</span>
-                    <span class="lang-en">Rupi Kaur</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>People go but how they left always stays.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>人会离开，可他们离去的方式，总留下点什么。</p></blockquote></div>
-                <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 12 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">12</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">贾浅浅</span>
-                    <span class="lang-en">Jia Qianqian</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Day is the whiteness of white,<br>night is the blackness of black.<br>For the sake of another color,<br>I shall blossom into a flower.<br>Cattle roam the ridge,<br>in the marshlands, mosquitoes thunder.<br>My body is my own weather;<br>the entire steppe hears the pain of my bursting bloom.<br>The wind has finally arrived.<br>I am ready to conceive.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>白天是白色的白<br>黑夜是黑色的黑<br>为了另一种颜色<br>我要，开成一朵花<br>田埂上有着牛群<br>沼泽地里蚊声轰然如雷<br>我的身体就是我的天气<br>整个草原都听见了我绽开着的疼<br>风终于来了<br>我准备怀孕</p></blockquote></div>
-                <footer><cite>贾浅浅 Jia Qianqian</cite> · <span class="source">《开花》 Blossoming</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 13 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">13</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">露比·考尔</span>
-                    <span class="lang-en">Rupi Kaur</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Loneliness is a sign you are in desperate need of yourself.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>孤独，是你迫切需要自己的信号。</p></blockquote></div>
-                <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 14 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">14</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">费尔南多·佩索阿</span>
-                    <span class="lang-en">Fernando Pessoa</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>And my heart is a little larger than the entire universe.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>而我的心，比整个宇宙还要稍稍大一点。</p></blockquote></div>
-                <footer><cite>Fernando Pessoa</cite> · <span class="source">A Little Larger Than the Entire Universe</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 15 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">15</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">窦靖童</span>
-                    <span class="lang-en">Leah Dou</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Do you believe that magic walks this earth?<br>Together, we can find it too.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>你相信这世界有魔法吗？<br>我们也可以一起找到它。</p></blockquote></div>
-                <footer><cite>窦靖童 Leah Dou</cite> · <span class="source">《同一个天空》 Under the Same Sky</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 16 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">16</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">声音玩具</span>
-                    <span class="lang-en">Sound Toy</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Until one day,<br>I am strong enough to face reality,<br>sharp as a razor,<br>yet it can no longer break my heart.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>直到某一天<br>我足够坚强<br>直面现实如剃刀般锋利<br>却再也不能破碎我的心。</p></blockquote></div>
-                <footer><cite>声音玩具 Sound Toy</cite> · <span class="source">《你的城市》 Your City</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 17 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">17</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">狄兰·托马斯</span>
-                    <span class="lang-en">Dylan Thomas</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>Do not go gentle into that good night.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>不要温和地走进那个良夜。</p></blockquote></div>
-                <footer><cite>Dylan Thomas</cite> · <span class="source">Do Not Go Gentle Into That Good Night</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 18 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">18</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">林芯仪</span>
-                    <span class="lang-en">Shino Lin</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>So you have been living inside my body all along,<br>watching over the memories of us.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>原来你就住在我的身体，<br>守护我的回忆。</p></blockquote></div>
-                <footer><cite>Shino Lin</cite> · <span class="source">Tempting Heart</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 19 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">19</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">卢广仲</span>
-                    <span class="lang-en">Crowd Lu</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>I look up, only to find<br>the crying stars are abandoning me.<br>Please hug me, in case I happen to fall.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>抬起头才发现<br>流眼泪的星星正在放弃我<br>请拥抱我<br>万一我不小心坠落</p></blockquote></div>
-                <footer><cite>Crowd Lu</cite> · <span class="source">Adulting</span></footer>
-            </div></div></div>
-        </article>
-
-        <!-- 20 -->
-        <article class="step">
-            <button class="step-fog" type="button" aria-expanded="false">
-                <span class="step-no">20</span>
-                <span class="step-hint">
-                    <span class="lang-zh">轻触展开</span>
-                    <span class="lang-en">tap to open</span>
-                </span>
-                <span class="step-cite">
-                    <span class="lang-zh">斯蒂芬·茨威格</span>
-                    <span class="lang-en">Stefan Zweig</span>
-                </span>
-                <span class="step-tick" aria-hidden="true">+</span>
-            </button>
-            <div class="step-reveal"><div class="step-inner"><div class="step-body">
-                <div class="lang-en"><blockquote><p>She did not know that fate never gives anything for free, and that it always leaves a hidden bill, even in the luckiest of times.</p></blockquote></div>
-                <div class="lang-zh"><blockquote><p>她不知道，命运从不免费赠予任何东西；哪怕在最幸运的时候，它也总会留下一笔隐藏的账单。</p></blockquote></div>
-                <footer><cite>Stefan Zweig</cite> · <span class="source">Marie Antoinette: The Portrait of an Average Woman</span></footer>
-            </div></div></div>
-        </article>
-
-    </div>
-</main>
-
-<footer id="site-footer" class="site-footer"></footer>
-<script src="nav.js"></script>
+    <div class="monitor-neck" aria-hidden="true"></div>
+    <div class="monitor-foot" aria-hidden="true"></div>
+  </div>
+</div>
 </body>
 </html>

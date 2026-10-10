@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        (function () {
+            var d = document.documentElement;
+            try {
+                var t = localStorage.getItem('site-theme');
+                if (t !== 'light' && t !== 'dark') {
+                    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                }
+                d.setAttribute('data-theme', t);
+                d.setAttribute('data-lang', localStorage.getItem('site-lang') === 'zh' ? 'zh' : 'en');
+                d.setAttribute('data-style', 'web');
+            } catch (e) {
+                d.setAttribute('data-theme', 'dark');
+                d.setAttribute('data-lang', 'en');
+                d.setAttribute('data-style', 'web');
+            }
+        })();
+    </script>
+</head>
+<body class="scene-locker">
+
+<div class="scene web-only" aria-hidden="true"></div>
+<div class="mist dream-only" aria-hidden="true"></div>
+<div class="grain dream-only" aria-hidden="true"></div>
+
+<!-- 弹窗页面 -->
+<div class="dialog-page web-only">
+    <div class="dialog-win" role="main">
+
+        <div class="dialog-titlebar">
+            <svg class="dtb-icon" viewBox="0 0 16 15" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                <rect x="1" y="2" width="6" height="1" fill="#f8c010"/>
+                <rect x="1" y="3" width="1" height="1" fill="#000"/>
+                <rect x="2" y="3" width="5" height="1" fill="#f8c010"/>
+                <rect x="7" y="3" width="8" height="1" fill="#000"/>
+                <rect x="1" y="4" width="1" height="1" fill="#000"/>
+                <rect x="2" y="4" width="12" height="1" fill="#f8c010"/>
+                <rect x="1" y="5" width="1" height="1" fill="#000"/>
+                <rect x="2" y="5" width="12" height="1" fill="#f8c010"/>
+                <rect x="1" y="6" width="14" height="8" fill="#000"/>
+                <rect x="2" y="7" width="12" height="6" fill="#ffffcc"/>
+                <rect x="3" y="8" width="8" height="1" fill="#a0a0c0" opacity="0.7"/>
+                <rect x="3" y="10" width="10" height="1" fill="#a0a0c0" opacity="0.7"/>
+                <rect x="3" y="12" width="7" height="1" fill="#a0a0c0" opacity="0.7"/>
+            </svg>
+            <span class="dtb-title lang-en">Projects — Maria Pan</span>
+            <span class="dtb-title lang-zh">项目 — Maria Pan</span>
+            <div class="dtb-btns">
+                <button class="dtb-btn" style="background-image:var(--g-min)" aria-label="Minimize"></button>
+                <button class="dtb-btn" style="background-image:var(--g-max)" aria-label="Maximize"></button>
+                <a href="index.html" class="dtb-btn" style="background-image:var(--g-x)" aria-label="Close"></a>
+            </div>
+        </div>
+
+        <div class="dialog-body">
+
+            <a class="dialog-back" href="index.html">
+                <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">
+                    <rect x="5" y="1" width="1" height="12" fill="currentColor"/>
+                    <rect x="5" y="1" width="5" height="1" fill="currentColor"/>
+                    <rect x="5" y="12" width="5" height="1" fill="currentColor"/>
+                    <rect x="2" y="5" width="1" height="4" fill="currentColor"/>
+                </svg>
+                <span class="lang-en">Back to Desktop</span>
+                <span class="lang-zh">返回桌面</span>
+            </a>
+
+            <h1>
+                <span class="lang-zh">项目</span>
+                <span class="lang-en">Projects</span>
+            </h1>
+            <p class="lede lang-zh">我做过和正在做的小项目，点一下查看简介。</p>
+            <p class="lede lang-en">Small projects I'm working on or thinking about. Tap one to read more.</p>
+
+            <div class="doors">
+
+                <article class="door">
+                    <button class="door-face" type="button" aria-expanded="false">
+                        <span class="door-no"><span class="tb-text">01</span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></span>
+                        <span class="door-body">
+                            <span class="door-title lang-zh">情绪日记</span>
+                            <span class="door-title lang-en">Emotion Diary</span>
+                        </span>
+                    </button>
+                    <span class="door-knob" aria-hidden="true"></span>
+                    <div class="door-reveal"><div class="door-inner">
+                        <p class="lang-zh">一个会听人说话的网页——通过文字、图像、天气，安静地记住一天到底是什么滋味。</p>
+                        <p class="lang-en">A small web that listens — through words, images, weather — and quietly keeps a record of how a day actually felt.</p>
+                        <span class="door-status">status · 尚未开始 / not started</span>
+                    </div></div>
+                </article>
+
+                <article class="door">
+                    <button class="door-face" type="button" aria-expanded="false">
+                        <span class="door-no"><span class="tb-text">02</span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></span>
+                        <span class="door-body">
+                            <span class="door-title lang-zh">恐龙小游戏</span>
+                            <span class="door-title lang-en">Dinosaur Game</span>
+                        </span>
+                    </button>
+                    <span class="door-knob" aria-hidden="true"></span>
+                    <div class="door-reveal"><div class="door-inner">
+                        <p class="lang-zh">给小朋友玩的捉迷藏：小恐龙躲在很软的风景里，等你去把它们找出来。</p>
+                        <p class="lang-en">A gentle hide-and-seek for kids — small dinosaurs hiding in soft landscapes, waiting to be found.</p>
+                        <span class="door-status">status · 画了一点点 / barely sketched</span>
+                    </div></div>
+                </article>
+
+                <article class="door">
+                    <button class="door-face" type="button" aria-expanded="false">
+                        <span class="door-no"><span class="tb-text">03</span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></span>
+                        <span class="door-body">
+                            <span class="door-title lang-zh">德语单词记忆</span>
+                            <span class="door-title lang-en">German Words Memory</span>
+                        </span>
+                    </button>
+                    <span class="door-knob" aria-hidden="true"></span>
+                    <div class="door-reveal"><div class="door-inner">
+                        <p class="lang-zh">用间隔重复和小故事，帮我把德语单词记牢一点——也许你也用得上。</p>
+                        <p class="lang-en">An app that helps me remember German vocabulary through spaced repetition and tiny stories. Maybe it helps you too.</p>
+                        <span class="door-status">status · 正在写 / in progress</span>
+                    </div></div>
+                </article>
+
+                <article class="door">
+                    <button class="door-face" type="button" aria-expanded="false">
+                        <span class="door-no"><span class="tb-text">04</span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></span>
+                        <span class="door-body">
+                            <span class="door-title lang-zh">职业路径</span>
+                            <span class="door-title lang-en">Careerpath</span>
+                        </span>
+                    </button>
+                    <span class="door-knob" aria-hidden="true"></span>
+                    <div class="door-reveal"><div class="door-inner">
+                        <p class="lang-zh">帮公司找到真正合适的人——不只是简历上合适，是气质上也合适。</p>
+                        <p class="lang-en">A platform that helps companies find people who genuinely fit — not just on paper, but in spirit.</p>
+                        <span class="door-status">status · 只是一个念头 / just a thought</span>
+                    </div></div>
+                </article>
+
+                <article class="door">
+                    <button class="door-face" type="button" aria-expanded="false">
+                        <span class="door-no"><span class="tb-text">05</span><span class="tb-btns web-only" aria-hidden="true"><i class="gl-min"></i><i class="gl-max"></i><i class="gl-x"></i></span></span>
+                        <span class="door-body">
+                            <span class="door-title lang-zh">睡眠提醒</span>
+                            <span class="door-title lang-en">Sleep Reminder</span>
+                        </span>
+                    </button>
+                    <span class="door-knob" aria-hidden="true"></span>
+                    <div class="door-reveal"><div class="door-inner">
+                        <p class="lang-zh">它不会冲你吼「该睡了」——只是把灯光一点点调柔，直到你真的睡着。</p>
+                        <p class="lang-en">It never shouts at you to sleep — it just turns the lights a little softer, until you do.</p>
+                        <span class="door-status">status · 尚未开始 / not started</span>
+                    </div></div>
+                </article>
+
+            </div><!-- .doors -->
+        </div><!-- .dialog-body -->
+    </div><!-- .dialog-win -->
+</div><!-- .dialog-page -->
+
+<!-- Dreamcore 内容 -->
+<header id="site-header" class="dream-only"></header>
+<main class="dream-only"></main>
+<footer id="site-footer" class="dream-only"></footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

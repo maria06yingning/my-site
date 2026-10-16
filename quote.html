@@ -17,6 +17,7 @@
   </script>
   <script src="nav.js" defer></script>
   <script src="power-machine.js" defer></script>
+  <script src="quote-hero.js" defer></script>
 </head>
 <body class="page-quote">
 <a class="skip-link" href="#content">跳至内容</a>
@@ -71,6 +72,32 @@
                 <span class="lang-zh">返回桌面</span>
             </a>
 
+            <!-- 今日一句：从下方 20 条语录中随机抽取一条 -->
+            <section class="quote-hero" aria-labelledby="hero-quote-heading">
+                <div class="quote-hero-bar">
+                    <i class="ico ico-doc" aria-hidden="true"></i>
+                    <span class="dtb-title" id="hero-quote-heading"><span class="lang-zh">今日一句</span><span class="lang-en">Quote of the day</span></span>
+                    <span class="hero-count mono" id="hero-count">01 / 20</span>
+                </div>
+                <div class="quote-hero-body">
+                    <div class="lang-zh"><blockquote class="hero-quote" id="hero-quote-zh"></blockquote></div>
+                    <div class="lang-en"><blockquote class="hero-quote" id="hero-quote-en"></blockquote></div>
+                    <footer class="hero-cite">
+                        <cite id="hero-cite-zh" class="lang-zh"></cite>
+                        <cite id="hero-cite-en" class="lang-en"></cite>
+                        <span class="source" id="hero-source"></span>
+                    </footer>
+                    <div class="hero-actions">
+                        <button class="btn-ghost" id="hero-shuffle" type="button">
+                            <span class="lang-zh">换一句</span><span class="lang-en">another</span>
+                        </button>
+                        <a class="btn-ghost" href="#descent">
+                            <span class="lang-zh">看全部</span><span class="lang-en">see all</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             <h1>
                 <span class="lang-zh">语录</span>
                 <span class="lang-en">Quotes</span>
@@ -90,7 +117,7 @@
                 </button>
             </div>
 
-            <div class="descent">
+            <div class="descent" id="descent">
 
                 <!-- 01 -->
                 <article class="step is-open">

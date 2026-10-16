@@ -27,7 +27,55 @@
         <div class="screen">
           <img class="wallpaper" src="bliss.jpg" alt="" fetchpriority="high" decoding="async">
           <div class="crt-glass" aria-hidden="true"></div>
-<main id="content" class="sr-only"><h1>Maria Pan</h1><p>个人网站桌面</p></main>
+          <nav class="desktop-icons" aria-label="桌面快捷方式">
+            <button class="desktop-icon" type="button" data-welcome-reopen hidden>
+              <i class="ico ico-pc" aria-hidden="true"></i>
+              <span class="lang-zh">欢迎</span><span class="lang-en">Welcome</span>
+            </button>
+            <a class="desktop-icon" href="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a>
+            <a class="desktop-icon" href="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a>
+            <a class="desktop-icon" href="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a>
+          </nav>
+
+          <div class="desktop-win" id="content">
+            <div class="dialog-win" role="main" aria-label="概览 / Overview">
+              <div class="dialog-titlebar">
+                <i class="ico ico-pc" aria-hidden="true"></i>
+                <span class="dtb-title lang-zh">欢迎 — Maria Pan</span>
+                <span class="dtb-title lang-en">Welcome — Maria Pan</span>
+                <div class="dtb-btns">
+                  <button class="dtb-btn" style="background-image:var(--g-min)" type="button" data-window="minimize" aria-label="最小化" title="最小化"></button>
+                  <button class="dtb-btn" style="background-image:var(--g-max)" type="button" data-window="maximize" aria-label="最大化" title="最大化" aria-pressed="false"></button>
+                  <button class="dtb-btn" style="background-image:var(--g-x)" type="button" data-window="close" aria-label="关闭窗口" title="关闭窗口"></button>
+                </div>
+              </div>
+              <div class="dialog-body">
+                <div class="overview">
+                  <figure class="overview-hero">
+                    <img src="bliss.jpg" alt="桌面壁纸：蓝天白云下的绿色山丘" width="152" height="114" decoding="async">
+                    <figcaption>
+                      <span class="lang-zh">桌面壁纸 · Bliss</span>
+                      <span class="lang-en">Desktop wallpaper · Bliss</span>
+                    </figcaption>
+                  </figure>
+                  <div class="overview-text">
+                    <h1>
+                      <span class="lang-zh">你好，我是 Maria Pan</span>
+                      <span class="lang-en">Hi, I am Maria Pan</span>
+                    </h1>
+                    <p class="lede lang-zh">这是我自己做的一个小网站，做成一台摆在桌面上的老电脑：里面收着我常读的语录，在做和想做的小项目，还有联系我的方式。</p>
+                    <p class="lede lang-en">A small site I built — an old computer sitting on a desk. It holds the quotes I keep coming back to, the projects I am poking at, and a way to reach me.</p>
+                  </div>
+                </div>
+                <ul class="desktop-links">
+                  <li><a href="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a></li>
+                  <li><a href="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a></li>
+                  <li><a href="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>
+                </ul>
+              </div>
+              <div class="window-status"><span class="lang-zh">就绪</span><span class="lang-en">Ready</span></div>
+            </div>
+          </div>
           <header id="site-header">
 <nav class="taskbar" aria-label="主导航">
   <button class="start-label" type="button" data-machine-start aria-label="开始 / Start"><i class="ico ico-flag" aria-hidden="true"></i><span class="start-word lang-zh">开始</span><span class="start-word lang-en">Start</span></button>

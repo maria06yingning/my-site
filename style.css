@@ -201,6 +201,58 @@ button.power-mark:active { box-shadow: inset 1px 1px 3px #747969, 1px 1px #edeed
 .monitor.is-powered-off .screen { background: #000; }
 .monitor.is-powered-off .screen > * { visibility: hidden !important; pointer-events: none !important; }
 .monitor.is-powered-off .power-led { background: #ec3932; box-shadow: 0 0 5px #ff392d; }
+/* Desktop icons: the wallpaper stays the hero, the window is a normal desktop object. */
+.desktop-icons { position: absolute; top: 14px; left: 13px; z-index: 4; display: flex; flex-direction: column; gap: 15px; margin: 0; padding: 0; list-style: none; }
+.desktop-icon { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 62px; border: 0; padding: 3px 2px; background: transparent; color: #fff; font: 10px/1.3 var(--ui); text-align: center; text-shadow: 1px 1px 2px #000c; text-decoration: none; }
+.desktop-icon[hidden] { display: none; }
+.desktop-icon:hover, .desktop-icon:focus-visible { color: #fff; }
+.desktop-icon .ico { width: 26px; height: 26px; filter: drop-shadow(1px 1px 1px #0009); }
+.desktop-icon:focus-visible .ico, .desktop-icon:hover .ico { background-color: #000080; box-shadow: 0 0 0 2px #ffffcc; }
+
+/* The overview lives in a real desktop window so the wallpaper remains visible. */
+.desktop-win { position: absolute; top: 20px; left: 96px; z-index: 3; display: flex; width: min(640px, calc(100% - 120px)); max-height: calc(100% - 78px); }
+.desktop-win .dialog-win { width: 100%; min-height: 0; }
+.desktop-win .dialog-body { padding: 15px 17px 17px; }
+.desktop-win.is-minimized .dialog-body, .desktop-win.is-minimized .window-status { display: none; }
+.desktop-win.is-closed { display: none; }
+.desktop-win.is-maximized { top: 0; left: 0; width: 100%; max-height: calc(100% - 40px); }
+.desktop-win.is-maximized .dialog-win { box-shadow: var(--out); }
+.overview { display: flex; gap: 15px; align-items: flex-start; }
+.overview-hero { flex: none; width: 152px; margin: 0; padding: 3px; background: var(--face); box-shadow: var(--out); }
+.overview-hero img { display: block; width: 100%; height: auto; box-shadow: var(--in); }
+.overview-hero figcaption { padding: 4px 1px 1px; color: #4a4a4a; font-size: 10px; }
+.overview-text { min-width: 0; }
+.overview-text h1 { margin: 0 0 7px; font-size: 22px; }
+.overview-text .lede { margin: 0 0 8px; font-size: 12px; line-height: 1.75; }
+.desktop-links { display: flex; flex-wrap: wrap; gap: 7px; margin: 15px 0 0; padding: 11px 0 0; border-top: 1px solid #b8b8b8; list-style: none; }
+.desktop-links a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; background: var(--face); box-shadow: var(--out); color: #111; text-decoration: none; font-size: 11px; }
+.desktop-links a:active { box-shadow: var(--in); }
+
+/* Quote of the day: same little blue window, promoted to the top of the page. */
+.quote-hero { margin: 13px 0 6px; padding: 3px; background: var(--face); box-shadow: var(--out), 2px 2px 0 #0002; }
+.quote-hero-bar { display: flex; align-items: center; gap: 6px; padding: 4px 5px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font: bold 12px var(--ui); }
+.quote-hero-bar .dtb-title { flex: 1; min-width: 0; }
+.hero-count { font-size: 10px; font-weight: normal; opacity: .85; }
+.quote-hero-body { margin-top: 3px; padding: 16px 17px 14px; background: #fff; box-shadow: var(--in); }
+.hero-quote { margin: 0; font: 16px/1.7 Georgia, 'Songti SC', SimSun, serif; color: #1a1a1a; }
+.hero-cite { margin-top: 10px; padding-top: 9px; border-top: 1px solid #d5d5d5; color: #555; font: 10px/1.6 var(--ui); }
+.hero-cite cite { margin-right: 2px; }
+.hero-actions { display: flex; gap: 8px; margin-top: 12px; }
+.hero-actions .btn-ghost { margin: 0; text-decoration: none; color: #111; display: inline-flex; align-items: center; }
+.mono { font-family: monospace; }
+
+@media (max-width: 850px) {
+  .desktop-icons { flex-direction: row; flex-wrap: wrap; gap: 6px; right: 8px; }
+  .desktop-icon { width: 52px; font-size: 9px; }
+  .desktop-icon .ico { width: 22px; height: 22px; }
+  .desktop-win { left: 8px; right: 8px; width: auto; top: 66px; max-height: calc(100% - 118px); }
+  .overview { flex-direction: column; }
+  .overview-hero { width: 100%; display: flex; gap: 10px; align-items: center; }
+  .overview-hero img { width: 96px; }
+  .overview-text h1 { font-size: 20px; }
+  .hero-quote { font: 15px/1.7 Georgia, 'Songti SC', SimSun, serif; }
+}
+
 @media (max-width: 600px) {
   .taskbar .start-label { display: flex; min-width: 30px; height: 34px; padding: 3px 5px; }
   .taskbar .start-label .start-word { display: none; }
@@ -208,4 +260,17 @@ button.power-mark:active { box-shadow: inset 1px 1px 3px #747969, 1px 1px #edeed
   .shutdown-control { width: 28px; height: 27px; }
   .shutdown-body { padding: 17px 12px; gap: 9px; }
   .shutdown-actions .classic-btn { min-height: 34px; }
+  .desktop-icons { top: 9px; left: 8px; right: 8px; gap: 4px; }
+  .desktop-icon { width: 46px; font-size: 9px; }
+  .desktop-icon .ico { width: 20px; height: 20px; }
+  .desktop-win { top: 58px; left: 6px; right: 6px; max-height: calc(100% - 108px); }
+  .desktop-win .dialog-body { padding: 12px 11px 14px; }
+  .desktop-win.is-maximized { max-height: calc(100% - 44px); }
+  .overview-text h1 { font-size: 18px; }
+  .overview-hero img { width: 78px; }
+  .desktop-links { gap: 6px; }
+  .desktop-links a { padding: 5px 8px; font-size: 10px; }
+  .quote-hero-body { padding: 13px 12px 12px; }
+  .hero-quote { font: 14px/1.7 Georgia, 'Songti SC', SimSun, serif; }
+  .hero-actions .btn-ghost { min-height: 32px; }
 }

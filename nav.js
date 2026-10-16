@@ -44,25 +44,55 @@
     document.querySelectorAll('.clock').forEach(function (c) { c.textContent = t; });
   }
 
-  /* 窗口控制：最小化 / 最大化切换 */
+  /* 窗口控制：最小化 / 最大化 / 关闭并重开 */
   function bindWindowControls() {
     var content = document.getElementById('content');
     if (!content) return;
-    var win = content.closest('.dialog-page');
+    var win = content.classList.contains('desktop-win') ? content : content.closest('.dialog-page');
     if (!win) return;
+
+    var reopen = document.querySelector('[data-welcome-reopen]');
+    function setReopenVisible(visible) {
+      if (reopen) reopen.hidden = !visible;
+    }
 
     win.querySelectorAll('[data-window]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var action = btn.dataset.window;
         if (action === 'minimize') {
-          win.classList.add('is-minimized');
+          win.classList.toggle('is-minimized');
           var activeLink = document.querySelector('.task-links a.active');
           if (activeLink) activeLink.focus();
         } else if (action === 'maximize') {
           win.classList.toggle('is-maximized');
           win.classList.remove('is-minimized');
           btn.setAttribute('aria-pressed', win.classList.contains('is-maximized') ? 'true' : 'false');
+        } else if (action === 'close') {
+          win.classList.add('is-closed');
+          setReopenVisible(true);
+          if (reopen) reopen.focus();
         }
+      });
+    });
+
+    if (reopen) {
+      reopen.addEventListener('click', function () {
+        win.classList.remove('is-closed', 'is-minimized');
+        setReopenVisible(false);
+        var heading = win.querySelector('h1');
+        if (heading) {
+          heading.tabIndex = -1;
+          heading.focus();
+        }
+      });
+    }
+
+    /* 窗口一旦被关闭，桌面图标接管导航，底部任务栏的首页按钮可重新打开它。 */
+    document.querySelectorAll('.task-links a[data-page="index.html"]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        if (!win.classList.contains('is-closed') || !reopen) return;
+        event.preventDefault();
+        reopen.click();
       });
     });
   }

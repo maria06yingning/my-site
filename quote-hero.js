@@ -1,14 +1,15 @@
 /* Quote of the day: reads the existing quote list instead of duplicating the text,
-   so the 20 entries stay the single source of truth. */
+   so the 20 entries stay the single source of truth.
+   语录直接融进主窗口，不再单独开一层窗口。 */
 (function () {
   'use strict';
 
-  var hero = document.querySelector('.quote-hero');
-  if (!hero) return;
+  var host = document.querySelector('.today');
+  if (!host) return;
 
   var steps = Array.prototype.slice.call(document.querySelectorAll('.descent .step'));
   if (!steps.length) {
-    hero.hidden = true;
+    host.hidden = true;
     return;
   }
 
@@ -33,7 +34,7 @@
   });
 
   if (!quotes.length) {
-    hero.hidden = true;
+    host.hidden = true;
     return;
   }
 
@@ -57,7 +58,7 @@
     if (nodes.citeEn) nodes.citeEn.textContent = q.citeEn || q.citeZh;
     if (nodes.source) nodes.source.textContent = q.source ? ' · ' + q.source : '';
     if (nodes.count) nodes.count.textContent = q.no + ' / ' + String(quotes.length).padStart(2, '0');
-    hero.dataset.index = String(index);
+    host.dataset.index = String(index);
   }
 
   function pick(avoid) {

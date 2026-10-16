@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light">
+<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light" data-power="off">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +13,7 @@
       var language = localStorage.getItem('site-lang') === 'en' ? 'en' : 'zh';
       document.documentElement.dataset.lang = language;
       document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+      if (localStorage.getItem('site-lang-chosen') === '1') document.documentElement.dataset.langChosen = '1';
     } catch (e) { /* 中文默认值支持离线和禁用存储的浏览器。 */ }
   </script>
   <script src="nav.js" defer></script>
@@ -164,22 +165,7 @@
 </div><!-- .dialog-page -->
 
 
-          <header id="site-header">
-<nav class="taskbar" aria-label="主导航">
-  <button class="start-label" type="button" data-machine-start aria-label="开始 / Start"><i class="ico ico-flag" aria-hidden="true"></i><span class="start-word lang-zh">开始</span><span class="start-word lang-en">Start</span></button>
-  <span class="taskbar-divider" aria-hidden="true"></span>
-  <ul class="task-links">
-    <li><a href="index.html" data-page="index.html"><i class="ico ico-pc" aria-hidden="true"></i><span class="lang-zh">首页</span><span class="lang-en">Home</span></a></li>
-    <li><a href="quote.html" data-page="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a></li>
-    <li><a href="project.html" data-page="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a></li>
-    <li><a href="contact.html" data-page="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>
-  </ul>
-  <div class="system-tray">
-    <div class="lang-toggle" role="group" aria-label="语言"><button type="button" data-lang="zh" aria-label="中文">中</button><button type="button" data-lang="en" aria-label="English">EN</button></div>
-    <time class="clock" aria-label="本地时间">--:--</time>
-  </div>
-</nav>
-          </header>
+          <header id="site-header"></header>
         </div>
       </div>
       <div class="monitor-chin"><span class="monitor-brand">MARIA</span><div class="monitor-hardware"><span class="vents"></span><span class="power-led" aria-hidden="true"></span><button class="power-mark" type="button" data-machine-power aria-label="电源：请求关机" title="电源" aria-pressed="true">⏻</button></div></div>

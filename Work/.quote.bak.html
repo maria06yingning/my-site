@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c0c0c0">
+  <title>语录 — Maria Pan</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="preload" href="bliss.jpg" as="image">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try {
+      var language = localStorage.getItem('site-lang') === 'en' ? 'en' : 'zh';
+      document.documentElement.dataset.lang = language;
+      document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+    } catch (e) { /* 中文默认值支持离线和禁用存储的浏览器。 */ }
+  </script>
+  <script src="nav.js" defer></script>
+  <script src="power-machine.js" defer></script>
+  <script src="quote-hero.js" defer></script>
+</head>
+<body class="page-quote">
+<a class="skip-link" href="#content">跳至内容</a>
+<div class="computer-stage">
+  <div class="computer">
+    <div class="monitor">
+      <div class="screen-rim">
+        <div class="screen">
+          <img class="wallpaper" src="bliss.jpg" alt="" fetchpriority="high" decoding="async">
+          <div class="crt-glass" aria-hidden="true"></div>
+<div class="dialog-page" id="content">
+    <div class="dialog-win" role="main" aria-label="语录">
+
+        <!-- 标题栏 -->
+        <div class="dialog-titlebar">
+            <svg class="dtb-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                <rect x="2" y="1" width="12" height="14" fill="#ffffcc"/>
+                <rect x="2" y="1" width="12" height="3" fill="#c0c0c0"/>
+                <rect x="3" y="5" width="10" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="7" width="8" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="9" width="10" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="3" y="11" width="7" height="1" fill="#8080ff" opacity="0.6"/>
+                <rect x="4" y="2" width="8" height="1" fill="#000080"/>
+            </svg>
+            <span class="dtb-title lang-en">Quotes — Maria Pan</span>
+            <span class="dtb-title lang-zh">语录 — Maria Pan</span>
+            <div class="dtb-btns">
+                <button class="dtb-btn" style="background-image:var(--g-min)" type="button" data-window="minimize" aria-label="最小化" title="最小化"></button>
+                <button class="dtb-btn" style="background-image:var(--g-max)" type="button" data-window="maximize" aria-label="最大化" title="最大化" aria-pressed="false"></button>
+                <a href="index.html" class="dtb-btn" style="background-image:var(--g-x)" aria-label="关闭并返回首页" title="关闭并返回首页"></a>
+            </div>
+        </div>
+
+        <!-- 内容 -->
+        <div class="dialog-body">
+
+            <!-- 返回按钮 -->
+            <a class="dialog-back" href="index.html">
+                <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">
+                    <rect x="5" y="1" width="1" height="12" fill="currentColor"/>
+                    <rect x="5" y="1" width="5" height="1" fill="currentColor"/>
+                    <rect x="5" y="12" width="5" height="1" fill="currentColor"/>
+                    <rect x="3" y="3" width="1" height="1" fill="currentColor"/>
+                    <rect x="4" y="3" width="1" height="1" fill="currentColor"/>
+                    <rect x="3" y="4" width="1" height="1" fill="currentColor"/>
+                    <rect x="2" y="5" width="1" height="4" fill="currentColor"/>
+                    <rect x="3" y="10" width="1" height="1" fill="currentColor"/>
+                    <rect x="4" y="10" width="1" height="1" fill="currentColor"/>
+                    <rect x="5" y="11" width="1" height="1" fill="currentColor"/>
+                </svg>
+                <span class="lang-en">Back to Desktop</span>
+                <span class="lang-zh">返回桌面</span>
+            </a>
+
+            <!-- 今日一句：从下方 20 条语录中随机抽取一条 -->
+            <section class="quote-hero" aria-labelledby="hero-quote-heading">
+                <div class="quote-hero-bar">
+                    <i class="ico ico-doc" aria-hidden="true"></i>
+                    <span class="dtb-title" id="hero-quote-heading"><span class="lang-zh">今日一句</span><span class="lang-en">Quote of the day</span></span>
+                    <span class="hero-count mono" id="hero-count">01 / 20</span>
+                </div>
+                <div class="quote-hero-body">
+                    <div class="lang-zh"><blockquote class="hero-quote" id="hero-quote-zh"></blockquote></div>
+                    <div class="lang-en"><blockquote class="hero-quote" id="hero-quote-en"></blockquote></div>
+                    <footer class="hero-cite">
+                        <cite id="hero-cite-zh" class="lang-zh"></cite>
+                        <cite id="hero-cite-en" class="lang-en"></cite>
+                        <span class="source" id="hero-source"></span>
+                    </footer>
+                    <div class="hero-actions">
+                        <button class="btn-ghost" id="hero-shuffle" type="button">
+                            <span class="lang-zh">换一句</span><span class="lang-en">another</span>
+                        </button>
+                        <a class="btn-ghost" href="#descent">
+                            <span class="lang-zh">看全部</span><span class="lang-en">see all</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <h1>
+                <span class="lang-zh">语录</span>
+                <span class="lang-en">Quotes</span>
+            </h1>
+            <p class="lede lang-zh">每一句话，都是一个打开的窗口。点击蓝色标题栏可收起。</p>
+            <p class="lede lang-en">A small window for every thought. Click a blue title bar to fold it away.</p>
+
+            <div class="fog-meter">
+                <span class="mono">
+                    <span class="lang-zh">已展开</span>
+                    <span class="lang-en">opened</span>
+                </span>
+                <b id="fog-count">20 / 20</b>
+                <button class="btn-ghost" id="fog-all" type="button">
+                    <span class="lang-zh">全部收起</span>
+                    <span class="lang-en">close all</span>
+                </button>
+            </div>
+
+            <div class="descent" id="descent">
+
+                <!-- 01 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">01</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>We never love anyone. What we love is the idea we have of someone. It's our own concept — our own selves — that we love.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我们从未真正爱过谁。我们爱的，是我们对某人的想象。那是我们自己的观念，是另一个自我。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 02 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">02</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">埃米尔·齐奥朗</span><span class="lang-en">Emil M. Cioran</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The same feeling of not belonging, of futility, wherever I go: I pretend interest in what matters nothing to me, I bestir myself mechanically or out of charity, without ever being caught up, without ever being somewhere. What attracts me is elsewhere, and I don't know where that elsewhere is.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>无论我走到哪里，那种格格不入、无所事事的感觉始终如一：我假装对自己毫不在意的事物有兴趣，机械地或出于善意地打起精神，却从未真正投入，从未真正在场。吸引我的总是在别处，而我不知道那别处在何方。</p></blockquote></div>
+                        <footer><cite>Emil M. Cioran</cite> · <span class="source">The Trouble With Being Born</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 03 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">03</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">埃米尔·齐奥朗</span><span class="lang-en">Emil M. Cioran</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The fact that life has no meaning is a reason to live — moreover, the only one.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>生活本无意义——这恰恰是活下去的理由，唯一的理由。</p></blockquote></div>
+                        <footer><cite>Emil M. Cioran</cite> · <span class="source">Anathemas and Admirations</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 04 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">04</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>I wasn't meant for reality, but life came and found me.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我本不属于现实，可生活还是找到了我。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 05 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">05</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Everything around me is evaporating. My whole life, my memories, my imagination and its contents, my personality — it's all evaporating. I continuously feel that I was someone else, that I felt something else, that I thought something else. What I'm attending here is a show with another set. And the show I'm attending is myself.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我周围的一切都在蒸发。我的整个人生，我的记忆，我的想象与其中的一切，我的个性——都在蒸发。我不断感到，自己曾是另一个人，曾感受过别的东西，曾思考过别的事。我此刻参与的，是另一套布景的演出。而这场演出，正是我自己。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 06 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">06</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>The feelings that hurt most, the emotions that sting most, are those that are absurd — the longing for impossible things, precisely because they are impossible; nostalgia for what never was; the desire for what could have been; regret over not being someone else; dissatisfaction with the world's existence.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>最伤人的感受，最刺人的情绪，恰恰是那些荒诞的——对不可能之事的渴望，正因其不可能；从未存在之物的乡愁；本可以发生之事的心愿；未能成为他人的遗憾；对世界存在本身的不满。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">The Book of Disquiet</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 07 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">07</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">简媜</span><span class="lang-en">Chien Chen</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>My obstinacy does not arise from reproach toward any of the realities of your life; rather, it is my keeping of an unwavering faith with my own life. You are so beautiful — you have always been more beautiful than I.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我的固执不是因为对你任何一桩现实的责难，而是对自己个我生命忠贞不二的守信。你甚美丽，你一向甚我美丽。</p></blockquote></div>
+                        <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 08 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">08</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">简媜</span><span class="lang-en">Chien Chen</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>In my heart, you have always been a noble soul, one whom I deeply revere. The longer I know you, the more you feel like a sanctuary of serene joy along my life's journey.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>在我心目中，你一直是个尊贵的灵魂，为我所景仰。认识你愈久，愈觉得你是我人生行路中一处清喜的水泽。</p></blockquote></div>
+                        <footer><cite>简媜 Chien Chen</cite> · <span class="source">《女儿红》 Daughter Red</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 09 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">09</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">双雪涛</span><span class="lang-en">Shuang Xuetao</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>She said, "Because you are about to forget me." I replied, "I haven't. I have only put you in a deeper place." "Where is this deeper place?" she asked. I said, "It is on the very edge of oblivion — where you can never be forgotten."</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>她说：「因为你要把我忘了。」我说：「我没有，我只是把你放在了更深的地方。」她说：「更深的地方是哪里？」我说：「是忘记的边缘——可永远忘不了，这就是最深的地方。」</p></blockquote></div>
+                        <footer><cite>双雪涛 Shuang Xuetao</cite> · <span class="source">《平原上的摩西》 Moses on the Plain</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 10 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">10</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">李商隐</span><span class="lang-en">Li Shangyin</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Did such a feeling need to look back from today? Even at that time it was already a lost way.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>此情可待成追忆，只是当时已惘然。</p></blockquote></div>
+                        <footer><cite>李商隐 Li Shangyin</cite> · <span class="source">《锦瑟》 The Patterned Lute</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 11 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">11</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">露比·考尔</span><span class="lang-en">Rupi Kaur</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>People go but how they left always stays.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>人会离开，可他们离去的方式，总留下点什么。</p></blockquote></div>
+                        <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 12 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">12</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">贾浅浅</span><span class="lang-en">Jia Qianqian</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>My body is my own weather; the entire steppe hears the pain of my bursting bloom. The wind has finally arrived. I am ready to conceive.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>我的身体就是我的天气，整个草原都听见了我绽开着的疼。风终于来了，我准备怀孕。</p></blockquote></div>
+                        <footer><cite>贾浅浅 Jia Qianqian</cite> · <span class="source">《开花》 Blossoming</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 13 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">13</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">露比·考尔</span><span class="lang-en">Rupi Kaur</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Loneliness is a sign you are in desperate need of yourself.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>孤独，是你迫切需要自己的信号。</p></blockquote></div>
+                        <footer><cite>Rupi Kaur</cite> · <span class="source">Milk and Honey</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 14 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">14</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">费尔南多·佩索阿</span><span class="lang-en">Fernando Pessoa</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>And my heart is a little larger than the entire universe.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>而我的心，比整个宇宙还要稍稍大一点。</p></blockquote></div>
+                        <footer><cite>Fernando Pessoa</cite> · <span class="source">A Little Larger Than the Entire Universe</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 15 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">15</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">窦靖童</span><span class="lang-en">Leah Dou</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Do you believe that magic walks this earth? Together, we can find it too.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>你相信这世界有魔法吗？我们也可以一起找到它。</p></blockquote></div>
+                        <footer><cite>窦靖童 Leah Dou</cite> · <span class="source">《同一个天空》 Under the Same Sky</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 16 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">16</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">声音玩具</span><span class="lang-en">Sound Toy</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Until one day, I am strong enough to face reality, sharp as a razor, yet it can no longer break my heart.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>直到某一天我足够坚强，直面现实如剃刀般锋利，却再也不能破碎我的心。</p></blockquote></div>
+                        <footer><cite>声音玩具 Sound Toy</cite> · <span class="source">《你的城市》 Your City</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 17 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">17</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">狄兰·托马斯</span><span class="lang-en">Dylan Thomas</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>Do not go gentle into that good night.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>不要温和地走进那个良夜。</p></blockquote></div>
+                        <footer><cite>Dylan Thomas</cite> · <span class="source">Do Not Go Gentle Into That Good Night</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 18 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">18</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">林芯仪</span><span class="lang-en">Shino Lin</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>So you have been living inside my body all along, watching over the memories of us.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>原来你就住在我的身体，守护我的回忆。</p></blockquote></div>
+                        <footer><cite>Shino Lin</cite> · <span class="source">Tempting Heart</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 19 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">19</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">卢广仲</span><span class="lang-en">Crowd Lu</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>I look up, only to find the crying stars are abandoning me. Please hug me, in case I happen to fall.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>抬起头才发现流眼泪的星星正在放弃我，请拥抱我，万一我不小心坠落。</p></blockquote></div>
+                        <footer><cite>Crowd Lu</cite> · <span class="source">Adulting</span></footer>
+                    </div></div></div>
+                </article>
+
+                <!-- 20 -->
+                <article class="step is-open">
+                    <button class="step-fog" type="button" aria-expanded="true">
+                        <span class="step-no">20</span>
+                        <span class="step-hint"><span class="lang-zh">轻触展开</span><span class="lang-en">tap to open</span></span>
+                        <span class="step-cite"><span class="lang-zh">斯蒂芬·茨威格</span><span class="lang-en">Stefan Zweig</span></span>
+                        <span class="step-tick" aria-hidden="true">+</span>
+                    </button>
+                    <div class="step-reveal"><div class="step-inner"><div class="step-body">
+                        <div class="lang-en"><blockquote><p>She did not know that fate never gives anything for free, and that it always leaves a hidden bill, even in the luckiest of times.</p></blockquote></div>
+                        <div class="lang-zh"><blockquote><p>她不知道，命运从不免费赠予任何东西；哪怕在最幸运的时候，它也总会留下一笔隐藏的账单。</p></blockquote></div>
+                        <footer><cite>Stefan Zweig</cite> · <span class="source">Marie Antoinette: The Portrait of an Average Woman</span></footer>
+                    </div></div></div>
+                </article>
+
+            </div><!-- .descent -->
+        </div><!-- .dialog-body -->
+<div class="window-status"><span class="lang-zh">就绪</span><span class="lang-en">Ready</span></div>
+    </div><!-- .dialog-win -->
+</div><!-- .dialog-page -->
+
+
+          <header id="site-header">
+<nav class="taskbar" aria-label="主导航">
+  <button class="start-label" type="button" data-machine-start aria-label="开始 / Start"><i class="ico ico-flag" aria-hidden="true"></i><span class="start-word lang-zh">开始</span><span class="start-word lang-en">Start</span></button>
+  <span class="taskbar-divider" aria-hidden="true"></span>
+  <ul class="task-links">
+    <li><a href="index.html" data-page="index.html"><i class="ico ico-pc" aria-hidden="true"></i><span class="lang-zh">首页</span><span class="lang-en">Home</span></a></li>
+    <li><a href="quote.html" data-page="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a></li>
+    <li><a href="project.html" data-page="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a></li>
+    <li><a href="contact.html" data-page="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>
+  </ul>
+  <div class="system-tray">
+    <div class="lang-toggle" role="group" aria-label="语言"><button type="button" data-lang="zh" aria-label="中文">中</button><button type="button" data-lang="en" aria-label="English">EN</button></div>
+    <time class="clock" aria-label="本地时间">--:--</time>
+  </div>
+</nav>
+          </header>
+        </div>
+      </div>
+      <div class="monitor-chin"><span class="monitor-brand">MARIA</span><div class="monitor-hardware"><span class="vents"></span><span class="power-led" aria-hidden="true"></span><button class="power-mark" type="button" data-machine-power aria-label="电源：请求关机" title="电源" aria-pressed="true">⏻</button></div></div>
+    </div>
+    <div class="monitor-neck" aria-hidden="true"></div>
+    <div class="monitor-foot" aria-hidden="true"></div>
+  </div>
+</div>
+</body>
+</html>

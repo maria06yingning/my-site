@@ -181,13 +181,100 @@ cite { font-style: normal; color: #000080; }
   .page-contact .dialog-page { inset: 12px 22px 52px; }
 }
 
-/* Useless machine: the taskbar stays above the window pile so Start is reachable. */
+
+/* ---------- 硬件开关：电源键、指示灯 ---------- */
 button.start-label { border: 0; background: var(--face); font-family: var(--ui); font-size: 13px; }
 button.start-label:active { box-shadow: var(--in); }
 button.power-mark { border: 0; padding: 0; background: #c9c9b7; position: relative; }
 button.power-mark::after { content: ''; position: absolute; inset: -7px; }
 button.power-mark:active { box-shadow: inset 1px 1px 3px #747969, 1px 1px #edeedd; }
-.shutdown-layer { position: absolute; inset: 0 0 44px; z-index: 15; pointer-events: none; }
+button.power-mark[disabled] { cursor: default; }
+.ico-info { background-image: var(--i-info); }
+.ico-x { background-image: var(--g-x); background-size: 10px; }
+.ico-music { background-image: var(--i-music); }
+.mono { font-family: monospace; }
+
+/* 四个电源状态。红/绿指示灯和电源键都在屏幕外壳上，黑屏时依然可见。 */
+html[data-power="off"] .screen { background: #000; }
+html[data-power="off"] .screen > * { visibility: hidden; }
+html[data-power="off"] .power-led { background: #ec3932; box-shadow: 0 0 6px #ff392d; }
+html[data-power="booting"] .power-led,
+html[data-power="login"] .power-led { background: #8edf49; box-shadow: 0 0 4px #9dfa5b; }
+html[data-power="booting"] .wallpaper,
+html[data-power="login"] .wallpaper,
+html[data-power="booting"] .dialog-page,
+html[data-power="login"] .dialog-page,
+html[data-power="booting"] #site-header,
+html[data-power="login"] #site-header,
+html[data-power="booting"] .balloon,
+html[data-power="login"] .balloon { visibility: hidden; }
+
+/* ---------- 开机动画 ---------- */
+.boot-layer { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; background: #05070c; color: #d8e2f0; }
+.boot-mark { display: grid; justify-items: center; gap: 16px; }
+.boot-brand { font: bold 30px/1 var(--ui); letter-spacing: 4px; color: #eef4ff; }
+.boot-brand-thin { font-weight: normal; color: #7fb0e8; }
+.boot-sub { font-size: 11px; letter-spacing: 1px; color: #8b9bb0; }
+.boot-bar { display: flex; gap: 5px; }
+.boot-bar i { width: 26px; height: 9px; background: #1d3550; box-shadow: inset 1px 1px #0a1420; animation: boot-seg 1.2s ease-in-out infinite; }
+.boot-bar i:nth-child(2) { animation-delay: .18s; }
+.boot-bar i:nth-child(3) { animation-delay: .36s; }
+@keyframes boot-seg { 0%,100% { background: #1d3550; } 45% { background: #52a2ef; } }
+@media (prefers-reduced-motion: reduce) { .boot-bar i { animation-duration: 2.6s; } }
+
+/* ---------- 登录：选择账户 ---------- */
+.login-layer { position: absolute; inset: 0; z-index: 39; display: grid; align-content: center; justify-items: center; gap: 26px; background: linear-gradient(#5a7edc, #3a63c8 55%, #2b4fae); color: #fff; }
+.login-strip { position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(90deg,#e33,#f90,#ee3,#3c3,#39f,#93f); }
+.login-card { display: grid; justify-items: center; gap: 14px; text-align: center; padding: 0 18px; }
+.login-hello { margin: 0; font-size: 12px; color: #e8eeff; }
+.login-user { display: grid; justify-items: center; gap: 9px; border: 0; padding: 14px 20px; background: transparent; color: #fff; }
+.login-user:hover, .login-user:focus-visible { background: #ffffff1f; outline: 1px solid #ffffff59; }
+.login-avatar { display: block; width: 84px; height: 84px; padding: 3px; background: var(--face); box-shadow: var(--out); }
+.login-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; box-shadow: var(--in); }
+.login-name { font: bold 16px var(--ui); text-shadow: 1px 1px 2px #001a4d; }
+.login-hint { margin: 0; font-size: 10px; color: #d3ddf6; }
+.login-foot { position: absolute; left: 0; right: 0; bottom: 14px; display: flex; justify-content: space-between; padding: 0 18px; font-size: 11px; color: #dfe7fb; }
+/* 还没主动选过语言时，登录界面中英并列；选过之后就只显示所选语言。 */
+html:not([data-lang-chosen]) .login-layer .lang-zh,
+html:not([data-lang-chosen]) .login-layer .lang-en { display: block !important; }
+html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
+
+/* ---------- 系统气泡：右下角，可关闭可重开 ---------- */
+.tray-balloon { display: grid; place-items: center; width: 22px; height: 22px; border: 0; padding: 0; background: transparent; }
+.tray-balloon[aria-pressed="true"] { background: #0000801f; box-shadow: var(--in); }
+.balloon { position: absolute; right: 10px; bottom: 50px; z-index: 28; width: min(300px, calc(100% - 20px)); padding: 3px; background: var(--face); box-shadow: var(--out), 3px 4px 0 #0005; }
+.balloon[hidden] { display: none; }
+.balloon-arrow { position: absolute; right: 20px; bottom: -8px; width: 14px; height: 8px; background: var(--face); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.balloon-bar { display: flex; align-items: center; gap: 6px; padding: 4px 5px; background: linear-gradient(90deg,#000080,#1084d0); color: #fff; font: bold 12px var(--ui); }
+.balloon-bar .dtb-title { flex: 1; min-width: 0; }
+.balloon-x { display: grid; place-items: center; flex: none; width: 20px; height: 18px; border: 0; padding: 0; background: var(--face); box-shadow: var(--out); }
+.balloon-x:active { box-shadow: var(--in); }
+.balloon-body { margin-top: 3px; padding: 12px 13px; max-height: 44svh; overflow: auto; background: #fffbe6; box-shadow: var(--in); }
+.balloon-body p { margin: 0 0 10px; font-size: 12px; line-height: 1.75; color: #1a1a1a; }
+.balloon-body p:last-of-type { margin-bottom: 0; }
+/* 最后一行是礼物：点一下放音乐，再点一下暂停。 */
+.balloon-gift { margin: 12px 0 0; }
+.gift-play { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 0; background: var(--face); box-shadow: var(--out); color: #111; font: 12px var(--ui); }
+.gift-play:hover { background: #cecece; }
+.gift-play:active { box-shadow: var(--in); }
+.gift-note { display: block; margin-top: 7px; font-size: 10px; color: #5a5a5a; }
+.balloon-gift[data-music-state="idle"] .gift-note-playing,
+.balloon-gift[data-music-state="playing"] .gift-note-idle { display: none; }
+.balloon-status { margin-top: 3px; padding: 2px 6px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; font-size: 10px; color: #3c3c3c; }
+
+/* ---------- 今日一句：主窗口里的一段，不是第二个窗口 ---------- */
+.today { margin: 4px 0 20px; padding: 0 0 15px; border-bottom: 1px solid #b8b8b8; }
+.today-head { display: flex; align-items: center; gap: 7px; margin: 0 0 9px; font: bold 13px var(--ui); color: #000080; }
+.today-count { margin-left: auto; font-size: 10px; font-weight: normal; color: #666; }
+.today-quote { margin: 0 0 9px; font: 16px/1.7 Georgia, 'Songti SC', SimSun, serif; color: #1a1a1a; }
+.today-cite { margin: 0 0 12px; color: #555; font-size: 10px; }
+.today-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.today-all { display: inline-flex; align-items: center; color: #111; text-decoration: none; }
+
+/* ---------- 关机警告窗口堆 ----------
+   层级要高于系统气泡（28），否则窄屏上气泡会盖住警告窗的按钮；
+   仍低于开机动画（40）和登录层（39）。 */
+.shutdown-layer { position: absolute; inset: 0 0 44px; z-index: 30; pointer-events: none; }
 .shutdown-window { position: absolute; width: min(330px, calc(100% - 8px)); max-height: calc(100% - 8px); overflow: auto; padding: 3px; background: #c0c0c0; color: #111; box-shadow: var(--out), 3px 4px 0 #0005; pointer-events: auto; }
 .shutdown-titlebar { display: flex; align-items: center; gap: 3px; padding: 3px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; }
 .shutdown-title { flex: 1; min-width: 0; font: bold 12px/1.3 var(--ui); }
@@ -198,79 +285,37 @@ button.power-mark:active { box-shadow: inset 1px 1px 3px #747969, 1px 1px #edeed
 .shutdown-warning { flex: none; width: 33px; height: 30px; padding-top: 5px; clip-path: polygon(50% 0,100% 100%,0 100%); background: #fff12a; color: #111; text-align: center; font: bold 23px/1.1 var(--ui); }
 .shutdown-actions { display: flex; justify-content: center; gap: 10px; padding: 0 13px 17px; }
 .shutdown-actions .classic-btn { min-width: 80px; min-height: 30px; font-size: 12px; }
-.monitor.is-powered-off .screen { background: #000; }
-.monitor.is-powered-off .screen > * { visibility: hidden !important; pointer-events: none !important; }
-.monitor.is-powered-off .power-led { background: #ec3932; box-shadow: 0 0 5px #ff392d; }
-/* Desktop icons: the wallpaper stays the hero, the window is a normal desktop object. */
-.desktop-icons { position: absolute; top: 14px; left: 13px; z-index: 4; display: flex; flex-direction: column; gap: 15px; margin: 0; padding: 0; list-style: none; }
-.desktop-icon { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 62px; border: 0; padding: 3px 2px; background: transparent; color: #fff; font: 10px/1.3 var(--ui); text-align: center; text-shadow: 1px 1px 2px #000c; text-decoration: none; }
-.desktop-icon[hidden] { display: none; }
-.desktop-icon:hover, .desktop-icon:focus-visible { color: #fff; }
-.desktop-icon .ico { width: 26px; height: 26px; filter: drop-shadow(1px 1px 1px #0009); }
-.desktop-icon:focus-visible .ico, .desktop-icon:hover .ico { background-color: #000080; box-shadow: 0 0 0 2px #ffffcc; }
 
-/* The overview lives in a real desktop window so the wallpaper remains visible. */
-.desktop-win { position: absolute; top: 20px; left: 96px; z-index: 3; display: flex; width: min(640px, calc(100% - 120px)); max-height: calc(100% - 78px); }
-.desktop-win .dialog-win { width: 100%; min-height: 0; }
-.desktop-win .dialog-body { padding: 15px 17px 17px; }
-.desktop-win.is-minimized .dialog-body, .desktop-win.is-minimized .window-status { display: none; }
-.desktop-win.is-closed { display: none; }
-.desktop-win.is-maximized { top: 0; left: 0; width: 100%; max-height: calc(100% - 40px); }
-.desktop-win.is-maximized .dialog-win { box-shadow: var(--out); }
-.overview { display: flex; gap: 15px; align-items: flex-start; }
-.overview-hero { flex: none; width: 152px; margin: 0; padding: 3px; background: var(--face); box-shadow: var(--out); }
-.overview-hero img { display: block; width: 100%; height: auto; box-shadow: var(--in); }
-.overview-hero figcaption { padding: 4px 1px 1px; color: #4a4a4a; font-size: 10px; }
-.overview-text { min-width: 0; }
-.overview-text h1 { margin: 0 0 7px; font-size: 22px; }
-.overview-text .lede { margin: 0 0 8px; font-size: 12px; line-height: 1.75; }
-.desktop-links { display: flex; flex-wrap: wrap; gap: 7px; margin: 15px 0 0; padding: 11px 0 0; border-top: 1px solid #b8b8b8; list-style: none; }
-.desktop-links a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; background: var(--face); box-shadow: var(--out); color: #111; text-decoration: none; font-size: 11px; }
-.desktop-links a:active { box-shadow: var(--in); }
-
-/* Quote of the day: same little blue window, promoted to the top of the page. */
-.quote-hero { margin: 13px 0 6px; padding: 3px; background: var(--face); box-shadow: var(--out), 2px 2px 0 #0002; }
-.quote-hero-bar { display: flex; align-items: center; gap: 6px; padding: 4px 5px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font: bold 12px var(--ui); }
-.quote-hero-bar .dtb-title { flex: 1; min-width: 0; }
-.hero-count { font-size: 10px; font-weight: normal; opacity: .85; }
-.quote-hero-body { margin-top: 3px; padding: 16px 17px 14px; background: #fff; box-shadow: var(--in); }
-.hero-quote { margin: 0; font: 16px/1.7 Georgia, 'Songti SC', SimSun, serif; color: #1a1a1a; }
-.hero-cite { margin-top: 10px; padding-top: 9px; border-top: 1px solid #d5d5d5; color: #555; font: 10px/1.6 var(--ui); }
-.hero-cite cite { margin-right: 2px; }
-.hero-actions { display: flex; gap: 8px; margin-top: 12px; }
-.hero-actions .btn-ghost { margin: 0; text-decoration: none; color: #111; display: inline-flex; align-items: center; }
-.mono { font-family: monospace; }
-
-@media (max-width: 850px) {
-  .desktop-icons { flex-direction: row; flex-wrap: wrap; gap: 6px; right: 8px; }
-  .desktop-icon { width: 52px; font-size: 9px; }
-  .desktop-icon .ico { width: 22px; height: 22px; }
-  .desktop-win { left: 8px; right: 8px; width: auto; top: 66px; max-height: calc(100% - 118px); }
-  .overview { flex-direction: column; }
-  .overview-hero { width: 100%; display: flex; gap: 10px; align-items: center; }
-  .overview-hero img { width: 96px; }
-  .overview-text h1 { font-size: 20px; }
-  .hero-quote { font: 15px/1.7 Georgia, 'Songti SC', SimSun, serif; }
-}
-
+/* ---------- 移动端：保留外壳与底座，内容区自己滚动 ---------- */
 @media (max-width: 600px) {
-  .taskbar .start-label { display: flex; min-width: 30px; height: 34px; padding: 3px 5px; }
-  .taskbar .start-label .start-word { display: none; }
-  .shutdown-titlebar { min-height: 32px; }
+  .computer-stage { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 100svh; padding: 0; }
+  .computer { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; }
+  .monitor { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 8px 7px 0; }
+  .screen-rim { display: flex; flex: 1; min-height: 0; }
+  .screen { flex: 1; height: auto; min-height: 210px; }
+  .monitor-chin { flex: none; }
+  /* 底座不再隐藏：屏幕外壳保持完整，电源键和指示灯留在原位。 */
+  .monitor-neck { display: block; flex: none; }
+  .monitor-foot { display: block; flex: none; }
+  /* 关机游戏只能靠 Start 清场，所以窄屏也要留一个能按的 Start，
+     此时只留图标，文字省掉以腾出空间。 */
+  .start-label { display: inline-flex; min-width: 38px; justify-content: center; padding: 0 6px; }
+  .start-label .start-word { display: none; }
+  .task-links a, .dtb-btn, .start-label, .lang-toggle button, .tray-balloon { min-height: 34px; }
+  .dtb-btn { width: 32px; height: 30px; background-size: 12px; }
+  .classic-btn { min-height: 36px; padding: 7px 14px; }
+  .step-fog { min-height: 38px; }
+  .dialog-page, .page-contact .dialog-page { inset: 10px 8px 56px; }
+  .dialog-page.is-maximized, .page-contact .dialog-page.is-maximized { inset: 0 0 44px; }
+  .balloon { right: 6px; bottom: 52px; }
+  .balloon-body { max-height: 40svh; }
+  .gift-play { width: 100%; justify-content: center; min-height: 36px; }
+  .shutdown-layer { inset: 0 0 44px; }
   .shutdown-control { width: 28px; height: 27px; }
   .shutdown-body { padding: 17px 12px; gap: 9px; }
   .shutdown-actions .classic-btn { min-height: 34px; }
-  .desktop-icons { top: 9px; left: 8px; right: 8px; gap: 4px; }
-  .desktop-icon { width: 46px; font-size: 9px; }
-  .desktop-icon .ico { width: 20px; height: 20px; }
-  .desktop-win { top: 58px; left: 6px; right: 6px; max-height: calc(100% - 108px); }
-  .desktop-win .dialog-body { padding: 12px 11px 14px; }
-  .desktop-win.is-maximized { max-height: calc(100% - 44px); }
-  .overview-text h1 { font-size: 18px; }
-  .overview-hero img { width: 78px; }
-  .desktop-links { gap: 6px; }
-  .desktop-links a { padding: 5px 8px; font-size: 10px; }
-  .quote-hero-body { padding: 13px 12px 12px; }
-  .hero-quote { font: 14px/1.7 Georgia, 'Songti SC', SimSun, serif; }
-  .hero-actions .btn-ghost { min-height: 32px; }
+  .login-avatar { width: 74px; height: 74px; }
+}
+@media (max-height: 620px) and (min-width: 601px) {
+  .screen { min-height: 200px; }
 }

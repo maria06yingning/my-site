@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light">
+<html lang="zh-CN" data-lang="zh" data-style="web" data-theme="light" data-power="off">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +13,7 @@
       var language = localStorage.getItem('site-lang') === 'en' ? 'en' : 'zh';
       document.documentElement.dataset.lang = language;
       document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+      if (localStorage.getItem('site-lang-chosen') === '1') document.documentElement.dataset.langChosen = '1';
     } catch (e) { /* 中文默认值支持离线和禁用存储的浏览器。 */ }
   </script>
   <script src="nav.js" defer></script>
@@ -72,30 +73,29 @@
                 <span class="lang-zh">返回桌面</span>
             </a>
 
-            <!-- 今日一句：从下方 20 条语录中随机抽取一条 -->
-            <section class="quote-hero" aria-labelledby="hero-quote-heading">
-                <div class="quote-hero-bar">
+            <!-- 今日一句：融进主窗口的一段内容，不再单独套一层窗口 -->
+            <section class="today" aria-labelledby="hero-quote-heading">
+                <h2 class="today-head" id="hero-quote-heading">
                     <i class="ico ico-doc" aria-hidden="true"></i>
-                    <span class="dtb-title" id="hero-quote-heading"><span class="lang-zh">今日一句</span><span class="lang-en">Quote of the day</span></span>
-                    <span class="hero-count mono" id="hero-count">01 / 20</span>
-                </div>
-                <div class="quote-hero-body">
-                    <div class="lang-zh"><blockquote class="hero-quote" id="hero-quote-zh"></blockquote></div>
-                    <div class="lang-en"><blockquote class="hero-quote" id="hero-quote-en"></blockquote></div>
-                    <footer class="hero-cite">
-                        <cite id="hero-cite-zh" class="lang-zh"></cite>
-                        <cite id="hero-cite-en" class="lang-en"></cite>
-                        <span class="source" id="hero-source"></span>
-                    </footer>
-                    <div class="hero-actions">
-                        <button class="btn-ghost" id="hero-shuffle" type="button">
-                            <span class="lang-zh">换一句</span><span class="lang-en">another</span>
-                        </button>
-                        <a class="btn-ghost" href="#descent">
-                            <span class="lang-zh">看全部</span><span class="lang-en">see all</span>
-                        </a>
-                    </div>
-                </div>
+                    <span class="lang-zh">今日一句</span>
+                    <span class="lang-en">Quote of the day</span>
+                    <span class="today-count mono" id="hero-count">01 / 20</span>
+                </h2>
+                <div class="lang-zh"><blockquote class="today-quote" id="hero-quote-zh"></blockquote></div>
+                <div class="lang-en"><blockquote class="today-quote" id="hero-quote-en"></blockquote></div>
+                <p class="today-cite">
+                    <cite id="hero-cite-zh" class="lang-zh"></cite>
+                    <cite id="hero-cite-en" class="lang-en"></cite>
+                    <span class="source" id="hero-source"></span>
+                </p>
+                <p class="today-actions">
+                    <button class="classic-btn" id="hero-shuffle" type="button">
+                        <span class="lang-zh">换一句</span><span class="lang-en">another</span>
+                    </button>
+                    <a class="classic-btn today-all" href="#descent">
+                        <span class="lang-zh">看全部</span><span class="lang-en">see all</span>
+                    </a>
+                </p>
             </section>
 
             <h1>
@@ -426,22 +426,7 @@
 </div><!-- .dialog-page -->
 
 
-          <header id="site-header">
-<nav class="taskbar" aria-label="主导航">
-  <button class="start-label" type="button" data-machine-start aria-label="开始 / Start"><i class="ico ico-flag" aria-hidden="true"></i><span class="start-word lang-zh">开始</span><span class="start-word lang-en">Start</span></button>
-  <span class="taskbar-divider" aria-hidden="true"></span>
-  <ul class="task-links">
-    <li><a href="index.html" data-page="index.html"><i class="ico ico-pc" aria-hidden="true"></i><span class="lang-zh">首页</span><span class="lang-en">Home</span></a></li>
-    <li><a href="quote.html" data-page="quote.html"><i class="ico ico-doc" aria-hidden="true"></i><span class="lang-zh">语录</span><span class="lang-en">Quotes</span></a></li>
-    <li><a href="project.html" data-page="project.html"><i class="ico ico-folder" aria-hidden="true"></i><span class="lang-zh">项目</span><span class="lang-en">Projects</span></a></li>
-    <li><a href="contact.html" data-page="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>
-  </ul>
-  <div class="system-tray">
-    <div class="lang-toggle" role="group" aria-label="语言"><button type="button" data-lang="zh" aria-label="中文">中</button><button type="button" data-lang="en" aria-label="English">EN</button></div>
-    <time class="clock" aria-label="本地时间">--:--</time>
-  </div>
-</nav>
-          </header>
+          <header id="site-header"></header>
         </div>
       </div>
       <div class="monitor-chin"><span class="monitor-brand">MARIA</span><div class="monitor-hardware"><span class="vents"></span><span class="power-led" aria-hidden="true"></span><button class="power-mark" type="button" data-machine-power aria-label="电源：请求关机" title="电源" aria-pressed="true">⏻</button></div></div>

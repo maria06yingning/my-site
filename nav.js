@@ -2,12 +2,18 @@
    四个页面各自只留一个空的 <header id="site-header"></header>，任务栏标记由这里注入，
    页面之间不可能再各自走样（原来四份内嵌的标记已经删除）。
    这里直接注入字符串，而不是 fetch nav.html —— 用 file:// 直接打开本地文件时也能工作。
-   nav.html 保留为同一份标记的可读镜像，方便对照。 */
+   nav.html 保留为同一份标记的可读镜像，方便对照。
+
+   常驻链接走“软导航”：只替换窗口里的内容，不重新载入整个文档。
+   这样音乐不会因为换页被打断（音频元素挂在文档上，文档一直没走），
+   URL 仍然通过 history 正常变化，刷新和直接打开某个页面也照旧是普通的多页 HTML。 */
 (function () {
   'use strict';
 
   var LANG_KEY = 'site-lang';
   var LANG_CHOSEN_KEY = 'site-lang-chosen';
+  var SKIP_SCRIPTS = ['nav.js', 'power-machine.js'];
+  var navToken = 0;
 
   var NAV_HTML =
     '<nav class="taskbar" aria-label="主导航">\n' +
@@ -81,24 +87,34 @@
     });
   }
 
-  /* 当前页高亮；只有内页才需要“还原窗口而不是刷新”的行为 */
-  function initActivePage() {
+  /* 当前页高亮。软导航之后要能重算，所以每次都按 URL 重新标记。 */
+  function markActive() {
     var page = location.pathname.split('/').pop() || 'index.html';
-    var win = document.querySelector('.dialog-page');
     document.querySelectorAll('.task-links a').forEach(function (link) {
-      if (link.dataset.page !== page) return;
-      link.classList.add('active');
-      link.setAttribute('aria-current', 'page');
-      if (!win) return;
-      link.addEventListener('click', function (event) {
-        event.preventDefault();
-        win.classList.remove('is-minimized');
-        var heading = win.querySelector('h1');
-        if (heading) {
-          heading.tabIndex = -1;
-          heading.focus();
-        }
-      });
+      var on = link.dataset.page === page;
+      link.classList.toggle('active', on);
+      if (on) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  /* 点自己那一页：不重新载入，只是把被最小化的窗口还原回来。 */
+  function bindActiveLink() {
+    var links = document.querySelector('.task-links');
+    if (!links || links.dataset.bound === '1') return;
+    links.dataset.bound = '1';
+    links.addEventListener('click', function (event) {
+      var link = event.target.closest('a[data-page]');
+      if (!link || !link.classList.contains('active')) return;
+      var win = document.querySelector('.dialog-page');
+      if (!win) return;             /* 首页本身没有窗口，点了等于刷新 */
+      event.preventDefault();
+      win.classList.remove('is-minimized');
+      var heading = win.querySelector('h1');
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus();
+      }
     });
   }
 
@@ -161,10 +177,120 @@
     });
   }
 
+  /* 内容换过之后的重新绑定。任务栏是常驻的，只重算高亮；窗口内的绑定随新节点重来。 */
+  function reinitContent() {
+    markActive();
+    bindWindowControls();
+    initDescent();
+    initDoors();
+    syncAllLabel();
+  }
+
   function mountNav() {
     var host = document.getElementById('site-header');
     if (!host) return;
     host.innerHTML = NAV_HTML;
+  }
+
+  /* ---------- 软导航 ---------- */
+
+  function canSoftNav() {
+    return location.protocol !== 'file:' && 'fetch' in window && 'DOMParser' in window && 'history' in window;
+  }
+
+  /* 只接手本地的 .html 链接；外链、锚点、下载、新窗口一律交给浏览器。 */
+  function internalUrl(link) {
+    if (!link || !link.getAttribute) return null;
+    if (link.target && link.target !== '_self') return null;
+    if (link.hasAttribute('download')) return null;
+    var href = link.getAttribute('href');
+    if (!href || /^(#|mailto:|tel:|javascript:)/i.test(href)) return null;
+    if (!/\.html($|[?#])/i.test(href)) return null;
+    var url;
+    try { url = new URL(href, location.href); } catch (e) { return null; }
+    if (url.origin !== location.origin) return null;
+    return url;
+  }
+
+  /* 页面内容就是窗口本身；首页没有窗口，只有一个 sr-only 的 main，两者可以互相替换。 */
+  function contentNode(doc) {
+    if (!doc) return null;
+    return doc.querySelector('.dialog-page') || doc.querySelector('.screen > main#content');
+  }
+
+  function currentContent() {
+    return document.querySelector('.screen > .dialog-page') || document.querySelector('.screen > main#content');
+  }
+
+  function runPageScripts(doc) {
+    Array.prototype.forEach.call(doc.querySelectorAll('script[src]'), function (old) {
+      var src = old.getAttribute('src');
+      if (!src) return;
+      var skip = SKIP_SCRIPTS.some(function (name) { return src.indexOf(name) !== -1; });
+      if (skip) return;
+      var s = document.createElement('script');
+      s.src = src;
+      document.body.appendChild(s);
+    });
+  }
+
+  function softLoad(url, push) {
+    var mine = ++navToken;
+    fetch(url.href, { credentials: 'same-origin' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('http ' + res.status);
+        return res.text();
+      })
+      .then(function (html) {
+        if (mine !== navToken) return;
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var next = contentNode(doc);
+        var screen = document.querySelector('.screen');
+        var header = document.getElementById('site-header');
+        if (!next || !screen) throw new Error('no content');
+        var node = document.importNode(next, true);
+        var cur = currentContent();
+        if (cur) cur.replaceWith(node);
+        else screen.insertBefore(node, header);
+        document.title = doc.title;
+        if (doc.body && doc.body.className) document.body.className = doc.body.className;
+        if (push) history.pushState({ soft: true }, '', url.href);
+        reinitContent();
+        runPageScripts(doc);
+        /* 让键盘用户知道自己已经到了新窗口，鼠标点击不会留下焦点框。 */
+        var win = document.querySelector('.dialog-page');
+        if (win) {
+          win.tabIndex = -1;
+          win.focus({ preventScroll: true });
+        }
+      })
+      .catch(function (err) {
+        console.warn('SOFTNAV_FAIL', err && err.message, err && err.stack);
+        if (mine !== navToken) return;
+        location.href = url.href;   /* 任何一步失败都退回普通跳转，功能不受影响 */
+      });
+  }
+
+  function bindSoftNav() {
+    document.addEventListener('click', function (event) {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      var root = document.documentElement;
+      if (root.dataset.power !== 'on') return;
+      /* 关机游戏进行中时，站内链接归 power-machine.js 管：点一下只会多出两个窗口。 */
+      if (root.dataset.pile === 'open') return;
+      var link = event.target.closest ? event.target.closest('a[href]') : null;
+      if (!link || link.classList.contains('active')) return;
+      var url = internalUrl(link);
+      if (!url || !canSoftNav()) return;
+      event.preventDefault();
+      softLoad(url, true);
+    }, false);
+
+    window.addEventListener('popstate', function () {
+      if (!canSoftNav()) return;
+      softLoad(new URL(location.href), false);
+    });
   }
 
   function init() {
@@ -173,10 +299,12 @@
     applyLang(document.documentElement.dataset.lang === 'en' ? 'en' : 'zh');
     tickClock();
     window.setInterval(tickClock, 15000);
-    initActivePage();
+    markActive();
+    bindActiveLink();
     bindWindowControls();
     initDescent();
     initDoors();
+    bindSoftNav();
     /* 电源脚本依赖这里的 Start 按钮。nav.js 在页面里排在它前面，所以标志位此时已经就绪。 */
     window.__siteNavReady = true;
     document.dispatchEvent(new CustomEvent('site:nav-ready'));

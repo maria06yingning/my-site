@@ -11,8 +11,8 @@
   --ui: Tahoma, Verdana, Arial, 'Microsoft YaHei', sans-serif;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; }
-body { color: var(--ink); font: 13px/1.5 var(--ui); background: #35484b; }
+html, body { margin: 0; min-height: 100%; background: #F172A3; }
+body { color: var(--ink); font: 13px/1.5 var(--ui); }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; font: inherit; cursor: pointer; border-radius: 0; }
 a { color: #0000aa; }
@@ -25,7 +25,7 @@ html:not([data-lang="zh"]) .lang-zh, html[data-lang="zh"] .lang-en { display: no
 /* A quiet, physical CRT shell. The desktop itself contains only the wallpaper and taskbar. */
 .computer-stage { min-height: 100svh; display: grid; align-content: center; justify-items: center; padding: 32px 30px 24px; }
 .computer { width: min(1080px, 100%); }
-.monitor { position: relative; padding: 33px 37px 0; border: 2px solid #9e9d8e; border-radius: 28px 28px 22px 22px; background: linear-gradient(120deg, #e8e5d6, #d6d3c4 48%, #bcbcab); box-shadow: inset 3px 3px 2px #f7f5e9, inset -5px -5px 2px #a4a493, 14px 20px 30px #12272966; }
+.monitor { position: relative; padding: 33px 37px 0; border: 2px solid #9e9d8e; border-radius: 28px 28px 22px 22px; background: linear-gradient(120deg, #e8e5d6, #d6d3c4 48%, #bcbcab); box-shadow: inset 3px 3px 2px #f7f5e9, inset -5px -5px 2px #a4a493, 14px 20px 32px #8e2f5666; }
 .screen-rim { padding: 12px; border-radius: 17px; background: #686a60; box-shadow: inset 5px 6px 7px #2d302d, 1px 1px 0 #f1eee1; }
 .screen { isolation: isolate; position: relative; height: min(65svh, 660px); min-height: 360px; overflow: hidden; border-radius: 7px; background: #3765a1; box-shadow: 0 0 2px 2px #171f23; }
 .wallpaper { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: -2; }
@@ -36,8 +36,9 @@ html:not([data-lang="zh"]) .lang-zh, html[data-lang="zh"] .lang-en { display: no
 .vents { width: 68px; height: 16px; background: repeating-linear-gradient(90deg, #7f8376 0, #7f8376 2px, transparent 2px, transparent 5px); opacity: .6; }
 .power-led { width: 6px; height: 6px; border-radius: 50%; background: #8edf49; box-shadow: 0 0 4px #9dfa5b; }
 .power-mark { display: grid; place-items: center; width: 30px; height: 24px; border-radius: 5px; box-shadow: inset 1px 1px #f4f1df, 1px 1px 2px #7e8274; color: #5f675a; font-size: 16px; }
-.monitor-neck { width: 24%; height: 27px; margin: auto; background: linear-gradient(90deg,#929587,#c5c5b4 25%,#c5c5b4 75%,#999d8c); box-shadow: inset 0 9px 10px #777b6c; }
-.monitor-foot { width: 42%; height: 21px; margin: auto; background: linear-gradient(#d8d7c5,#b1b5a1); border-radius: 50% 50% 5px 5px / 70% 70% 5px 5px; border-bottom: 3px solid #929988; box-shadow: 0 12px 12px #152c3466; }
+.monitor-neck { width: 24%; height: 27px; margin: 0 auto; background: linear-gradient(90deg,#929587,#c5c5b4 25%,#c5c5b4 75%,#999d8c); box-shadow: inset 0 9px 10px #777b6c; }
+/* 底座圆弧压住连接段，而不是仅让两个矩形边缘相接；固定外边距也避免移动端 flex 自动留白。 */
+.monitor-foot { position: relative; width: 42%; height: 21px; margin: -8px auto 0; background: linear-gradient(#d8d7c5,#b1b5a1); border-radius: 50% 50% 5px 5px / 70% 70% 5px 5px; border-bottom: 3px solid #929988; box-shadow: 0 12px 14px #932b5766; }
 /* Persistent bottom navigation; all links are ordinary local HTML links. */
 #site-header { position: absolute; bottom: 0; left: 0; right: 0; z-index: 20; }
 .taskbar { display: flex; align-items: center; gap: 7px; min-height: 40px; padding: 4px; background: var(--face); box-shadow: inset 0 1px #fff, inset 0 2px #dfdfdf; }
@@ -244,6 +245,14 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 .tray-balloon[aria-pressed="true"] { background: #0000801f; box-shadow: var(--in); }
 .balloon { position: absolute; right: 10px; bottom: 50px; z-index: 28; width: min(300px, calc(100% - 20px)); padding: 3px; background: var(--face); box-shadow: var(--out), 3px 4px 0 #0005; }
 .balloon[hidden] { display: none; }
+/* 开机后自动弹出：像老系统那样从任务栏上方慢慢升起，不是“啪”一下出现。 */
+.balloon.is-appearing { animation: balloon-rise 620ms cubic-bezier(.22,.68,.24,1) both; }
+@keyframes balloon-rise {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .balloon.is-appearing { animation-duration: 1ms; } }
 .balloon-arrow { position: absolute; right: 20px; bottom: -8px; width: 14px; height: 8px; background: var(--face); clip-path: polygon(0 0, 100% 0, 50% 100%); }
 .balloon-bar { display: flex; align-items: center; gap: 6px; padding: 4px 5px; background: linear-gradient(90deg,#000080,#1084d0); color: #fff; font: bold 12px var(--ui); }
 .balloon-bar .dtb-title { flex: 1; min-width: 0; }
@@ -252,14 +261,24 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 .balloon-body { margin-top: 3px; padding: 12px 13px; max-height: 44svh; overflow: auto; background: #fffbe6; box-shadow: var(--in); }
 .balloon-body p { margin: 0 0 10px; font-size: 12px; line-height: 1.75; color: #1a1a1a; }
 .balloon-body p:last-of-type { margin-bottom: 0; }
-/* 最后一行是礼物：点一下放音乐，再点一下暂停。 */
-.balloon-gift { margin: 12px 0 0; }
-.gift-play { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 0; background: var(--face); box-shadow: var(--out); color: #111; font: 12px var(--ui); }
-.gift-play:hover { background: #cecece; }
-.gift-play:active { box-shadow: var(--in); }
-.gift-note { display: block; margin-top: 7px; font-size: 10px; color: #5a5a5a; }
-.balloon-gift[data-music-state="idle"] .gift-note-playing,
-.balloon-gift[data-music-state="playing"] .gift-note-idle { display: none; }
+/* 无文字的小礼物：盒盖随真实播放状态打开，暂停时合上。 */
+.balloon-gift { margin: 4px 0 0; }
+.gift-play { display: inline-grid; place-items: center; width: 80px; height: 84px; padding: 0; border: 0; background: transparent; vertical-align: middle; touch-action: manipulation; }
+.gift-box { position: relative; display: block; width: 72px; height: 78px; }
+.gift-base { position: absolute; left: 15px; bottom: 8px; width: 44px; height: 32px; border: 2px solid #873659; background: linear-gradient(90deg,#ef82a9 0 38%,#ffe3a0 38% 61%,#df608f 61%); box-shadow: inset 2px 2px #ffb9d0, inset -2px -2px #b74473, 2px 2px #0002; }
+.gift-lid { position: absolute; left: 11px; bottom: 37px; width: 52px; height: 12px; border: 2px solid #873659; background: linear-gradient(90deg,#f399b9 0 39%,#ffe3a0 39% 60%,#e7709c 60%); box-shadow: inset 1px 1px #ffd0de, 0 2px #87365955; transform-origin: 15% 80%; transition: transform 420ms cubic-bezier(.22,.68,.24,1); }
+.gift-bow { position: absolute; left: 21px; top: -7px; width: 7px; height: 7px; background: #ffe3a0; border: 1px solid #a77635; }
+.gift-bow::before, .gift-bow::after { content: ''; position: absolute; top: -7px; width: 13px; height: 9px; border: 2px solid #a77635; background: #ffe3a0; }
+.gift-bow::before { right: 3px; border-radius: 7px 7px 0 7px; transform: rotate(18deg); }
+.gift-bow::after { left: 3px; border-radius: 7px 7px 7px 0; transform: rotate(-18deg); }
+.gift-glow { position: absolute; left: 20px; bottom: 30px; width: 32px; height: 28px; background: radial-gradient(ellipse at bottom,#ffdb77aa,transparent 70%); opacity: 0; transition: opacity 400ms; }
+.gift-spark { position: absolute; right: 5px; top: 20px; color: #946126; font: bold 19px/1 Georgia,serif; opacity: 0; transform: translateY(8px); transition: opacity 350ms, transform 420ms; }
+.gift-play:hover .gift-base { filter: brightness(1.07); }
+.gift-play:active .gift-box { translate: 0 1px; }
+.balloon-gift[data-music-state="playing"] .gift-lid { transform: translate(-5px,-17px) rotate(-18deg); }
+.balloon-gift[data-music-state="playing"] .gift-glow { opacity: 1; }
+.balloon-gift[data-music-state="playing"] .gift-spark { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .gift-lid, .gift-glow, .gift-spark { transition: none; } }
 .balloon-status { margin-top: 3px; padding: 2px 6px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; font-size: 10px; color: #3c3c3c; }
 
 /* ---------- 今日一句：主窗口里的一段，不是第二个窗口 ---------- */
@@ -309,7 +328,7 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
   .dialog-page.is-maximized, .page-contact .dialog-page.is-maximized { inset: 0 0 44px; }
   .balloon { right: 6px; bottom: 52px; }
   .balloon-body { max-height: 40svh; }
-  .gift-play { width: 100%; justify-content: center; min-height: 36px; }
+  .gift-play { width: 80px; height: 84px; }
   .shutdown-layer { inset: 0 0 44px; }
   .shutdown-control { width: 28px; height: 27px; }
   .shutdown-body { padding: 17px 12px; gap: 9px; }

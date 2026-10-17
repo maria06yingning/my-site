@@ -290,22 +290,22 @@
 
   function pileSize() { return pile.children.length; }
 
-  /* 上限不是一个写死的数字：按当前屏幕和窗口实际尺寸算出需要几个才铺满。
-     随机摆放会出现重叠，所以不能只按“格子数”算——按随机覆盖估算，
-     乘 7 后约能盖住 99.9% 的面积，边缘也会被压住。 */
+  /* 上限不是一个写死的数字：按屏幕和窗口的实际面积比换算。
+     随机摆放会出现重叠，所以不能只数“格子”；按住面积比乘 16，
+     约能盖住 99.8% 以上，再留一个性能上限防止小机器卡顿。 */
   function pileCapacity() {
     var area = pile.getBoundingClientRect();
     if (!area.width || !area.height) return MIN_PILE;
     var probe = pile.firstElementChild;
     var w = (probe && probe.offsetWidth) || Math.min(330, Math.max(180, area.width - 8));
     var h = (probe && probe.offsetHeight) || 186;
-    var cols = Math.max(1, Math.ceil(area.width / Math.max(1, w)));
-    var rows = Math.max(1, Math.ceil(area.height / Math.max(1, h)));
-    return Math.max(MIN_PILE, Math.min(MAX_PILE, Math.ceil(cols * rows * 7)));
+    var ratio = (area.width * area.height) / Math.max(1, w * h);
+    return Math.max(MIN_PILE, Math.min(MAX_PILE, Math.ceil(ratio * 16)));
   }
 
   /* 每个窗口出生时只抽取一次随机位置。增殖不重新排列旧窗口；
-     缩放屏幕时沿用相对坐标，避免越界，也不会变成整齐的网格。 */
+     纵向横向都允许稍微探出屏幕一点（窗口本来就能被拖到边上），
+     否则贴着屏幕边的那一圈永远盖不到，堆再多也留一道缝。 */
   function placeWindows() {
     var kids = pile.children;
     if (!kids.length) return;
@@ -319,8 +319,12 @@
       }
       var spanX = Math.max(0, area.width - win.offsetWidth);
       var spanY = Math.max(0, area.height - win.offsetHeight);
-      win.style.left = Math.round(Number(win.dataset.randomX) * spanX) + 'px';
-      win.style.top = Math.round(Number(win.dataset.randomY) * spanY) + 'px';
+      var overX = win.offsetWidth * 0.25;
+      var overY = win.offsetHeight * 0.25;
+      var x = -overX + Number(win.dataset.randomX) * (spanX + overX * 2);
+      var y = -overY + Number(win.dataset.randomY) * (spanY + overY * 2);
+      win.style.left = Math.round(x) + 'px';
+      win.style.top = Math.round(y) + 'px';
     }
   }
 

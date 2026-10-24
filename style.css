@@ -267,22 +267,7 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 /* 没有摊开状态时，纸只作为“揉紧的整体”存在，看不见。 */
 .paper:not(.is-revealed) .paper-sheet { opacity: 0; pointer-events: none; }
 
-/* 半开的时候纸上还留着没抚平的折痕：几道细的明暗斜线，
-   越接近全开越淡，最后完全消失。不是给纸加边框，而是让它看起来“还没展平”。 */
-.paper-sheet::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--paper-open-ms) linear;
-  background:
-    linear-gradient(96deg, transparent 0 26%, #b6ae9c55 26.3% 26.7%, #fffdf955 26.9% 27.6%, transparent 27.9%),
-    linear-gradient(-71deg, transparent 0 41%, #ada69455 41.3% 41.7%, #fffdf955 41.9% 42.6%, transparent 42.9%),
-    linear-gradient(58deg, transparent 0 61%, #b6ae9c55 61.3% 61.7%, #fffdf955 61.9% 62.6%, transparent 62.9%),
-    linear-gradient(-24deg, transparent 0 78%, #ada69455 78.3% 78.7%, #fffdf955 78.9% 79.6%, transparent 79.9%);
-}
-.paper.is-revealed .paper-sheet::after { opacity: .55; }
+/* 摊平后就是一张干净的纸：不再叠加斜向折痕线。 */
 .paper[hidden] { display: none; }
 .paper > * { pointer-events: auto; }
 

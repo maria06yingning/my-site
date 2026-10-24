@@ -7,6 +7,13 @@
    全部界面都由这里注入，四个页面共用同一套流程。
    这是纯视觉游戏：不会关闭浏览器窗口，也不会影响设备电源或任何数据。
 
+   桌面上的四个机构：
+     · 任务栏「开始」   从左侧弹出一个纸团，点一下拆一层，拆到最后是说明纸（带礼物）
+     · 纸团本身         可再次揉起，也可以直接拎到回收站
+     · 电源键           开机 / 请求关机
+     · 系统托盘的信息键 弹出「关闭计算机」警告窗，每点一次翻倍
+     · 回收站           把纸团、警告窗、页面窗口拖上去就收进去，图标会变满
+
    两点补充：
    · 音乐的状态和进度记在 sessionStorage 里，换页后自动接着放（同一次浏览会话）。
    · 系统音效全部用 Web Audio 现场合成，不依赖任何音频文件，也不涉及他人录音的版权。 */
@@ -19,12 +26,21 @@
   if (!monitor || !screen) return;
 
   var SESSION_KEY = 'site-session';
-  var BALLOON_KEY = 'site-balloon-seen';
+  var PAPER_KEY = 'site-paper-seen';
   var MUSIC_KEY = 'site-music';
   var BOOT_MS = 2200;
   /* 弹窗堆的下限和上限。实际可用数量按屏幕面积算，见 pileCapacity()。 */
   var MIN_PILE = 72;
   var MAX_PILE = 320;
+
+  /* 拖拽判定：手指/指针挪动超过这个像素才算“拎起来”，否则仍然算点击。 */
+  var DRAG_THRESHOLD = 6;
+  /* 拎起来再松手时浏览器仍会补一个 click：这段时间里所有点击都当作拖拽的余波。 */
+  var suppressClickUntil = 0;
+  /* 落在回收站周围这么宽的范围内都算放进去。 */
+  var TRASH_PAD = 20;
+  /* 丢进回收站的那一下收拢动画时长，与 CSS 里的 .is-tossed 对齐。 */
+  var TOSS_MS = 380;
 
   var power = null;      /* 由导航注入，稍后再取 */
   var start = null;
@@ -60,36 +76,75 @@
     '</div>' +
     '<div class="login-foot" aria-hidden="true"><span class="login-foot-note">Maria Pan</span><span class="mono login-foot-time">--:--</span></div>';
 
-  var balloon = document.createElement('div');
-  balloon.className = 'balloon';
-  balloon.hidden = true;
-  balloon.setAttribute('role', 'dialog');
-  balloon.setAttribute('aria-labelledby', 'balloon-title');
-  balloon.innerHTML =
-    '<div class="balloon-arrow" aria-hidden="true"></div>' +
-    '<div class="balloon-bar">' +
-      '<i class="ico ico-info" aria-hidden="true"></i>' +
-      '<span class="dtb-title" id="balloon-title"><span class="lang-zh">网站简介</span><span class="lang-en">About this site</span></span>' +
-      '<button class="balloon-x" type="button" data-balloon-close aria-label="关闭提示 / Close"><i class="ico ico-x" aria-hidden="true"></i></button>' +
-    '</div>' +
-    '<div class="balloon-body">' +
-      '<p class="lang-zh">hi 欢迎你来到过去。</p>' +
-      '<p class="lang-en">hi, welcome to the past.</p>' +
-      '<p class="lang-zh">你知道，不管外界如何变化，总有一个地方，或多或少一直都在那里。</p>' +
-      '<p class="lang-en">You know, no matter how the world outside changes, there is always somewhere that stays, more or less, right where it was.</p>' +
-      '<p class="lang-zh">我是 Maria，这是我第一个 HTML 文件，这里是我的秘密基地！</p>' +
-      '<p class="lang-en">I am Maria. This is my very first HTML file, and this is my secret base.</p>' +
-      '<p class="lang-zh">希望你能找到一些有趣的，要离开时记得给电脑关机呀！</p>' +
-      '<p class="lang-en">I hope you find something fun here. When you leave, remember to shut the computer down.</p>' +
-      '<p class="lang-zh">也不知道是不是初次见面，这是一个小礼物！</p>' +
-      '<p class="lang-en">I do not know if this is our first meeting — here is a small gift.</p>' +
-      '<div class="balloon-gift" data-music-state="idle">' +
-        '<button class="gift-play" type="button" data-gift-play aria-pressed="false" aria-label="打开礼物">' +
-          '<span class="gift-box" aria-hidden="true"><span class="gift-glow"></span><span class="gift-base"></span><span class="gift-lid"><span class="gift-bow"></span></span><span class="gift-spark">♪</span></span>' +
-        '</button>' +
+  /* 回收站：老系统桌面上那只铁皮桶。空/满两只图标由 CSS 变量切换。 */
+  var trash = document.createElement('button');
+  trash.type = 'button';
+  trash.className = 'desktop-trash';
+  trash.setAttribute('data-trash', '');
+  trash.setAttribute('aria-label', '回收站：空 / Recycle Bin: empty');
+  trash.innerHTML =
+    '<span class="desktop-trash-ico" aria-hidden="true"></span>' +
+    '<span class="desktop-trash-label"><span class="lang-zh">回收站</span><span class="lang-en">Recycle Bin</span></span>';
+
+  /* 纸团 → 说明纸。一个容器里叠两层：揉皱的纸团、摊开的纸。
+     拆解/揉起只做 transform / opacity / filter，层级由 data-stage 决定。 */
+  /* 纸团表面的起伏：湍流 + 漫反射光照，做成 CSS 滤镜供 .ball-core 引用。
+     纯声明式，没有 JS 也照样渲染；不支持的浏览器会退回平面色。 */
+  var paperDefs = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  paperDefs.setAttribute('aria-hidden', 'true');
+  paperDefs.setAttribute('width', '0');
+  paperDefs.setAttribute('height', '0');
+  paperDefs.setAttribute('focusable', 'false');
+  paperDefs.style.position = 'absolute';
+  paperDefs.innerHTML =
+    '<filter id="paper-relief" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.03 0.04" numOctaves="3" seed="5" result="noise"></feTurbulence>' +
+      '<feDiffuseLighting in="noise" lighting-color="#fffdf0" surfaceScale="4" diffuseConstant="1" result="light">' +
+        '<feDistantLight azimuth="310" elevation="55"></feDistantLight>' +
+      '</feDiffuseLighting>' +
+      '<feBlend in="SourceGraphic" in2="light" mode="multiply" result="shaded"></feBlend>' +
+      '<feComposite in="shaded" in2="SourceGraphic" operator="in"></feComposite>' +
+    '</filter>';
+
+  /* 说明纸：只在某一颗纸团被拆开时出现。纸团本身可以有任意多颗。 */
+  var paper = document.createElement('div');
+  paper.className = 'paper';
+  paper.hidden = true;
+  paper.dataset.stage = '0';
+  paper.innerHTML =
+    '<div class="paper-sheet" role="dialog" aria-modal="false" aria-labelledby="paper-title" tabindex="-1">' +
+      '<div class="paper-head" data-paper-handle>' +
+        '<span class="paper-title" id="paper-title"><span class="lang-zh">网站简介</span><span class="lang-en">About this site</span></span>' +
+        '<span class="paper-grip" aria-hidden="true"><span class="lang-zh">点一下揉起来</span><span class="lang-en">click to crumple</span></span>' +
       '</div>' +
-    '</div>' +
-    '<div class="balloon-status"><span class="lang-zh">网站说明</span><span class="lang-en">Site note</span></div>';
+      '<div class="paper-body">' +
+        '<p class="lang-zh">hi 欢迎你来到过去。</p>' +
+        '<p class="lang-en">hi, welcome to the past.</p>' +
+        '<p class="lang-zh">你知道，不管外界如何变化，总有一个地方，或多或少一直都在那里。</p>' +
+        '<p class="lang-en">You know, no matter how the world outside changes, there is always somewhere that stays, more or less, right where it was.</p>' +
+        '<p class="lang-zh">我是 Maria，这是我第一个 HTML 文件，这里是我的秘密基地！</p>' +
+        '<p class="lang-en">I am Maria. This is my very first HTML file, and this is my secret base.</p>' +
+        '<p class="lang-zh">希望你能找到一些有趣的，要离开时记得给电脑关机呀！</p>' +
+        '<p class="lang-en">I hope you find something fun here. When you leave, remember to shut the computer down.</p>' +
+        '<p class="lang-zh">也不知道是不是初次见面，这是一个小礼物！</p>' +
+        '<p class="lang-en">I do not know if this is our first meeting — here is a small gift.</p>' +
+        '<div class="paper-gift" data-music-state="idle">' +
+          '<button class="gift-play" type="button" data-gift-play aria-pressed="false" aria-label="打开礼物">' +
+            '<span class="gift-box" aria-hidden="true"><span class="gift-glow"></span><span class="gift-base"></span><span class="gift-lid"><span class="gift-bow"></span></span><span class="gift-spark">♪</span></span>' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="paper-foot">' +
+        '<button class="classic-btn paper-btn" type="button" data-paper-crumple><span class="lang-zh">揉成纸团</span><span class="lang-en">Crumple it</span></button>' +
+        '<button class="classic-btn paper-btn" type="button" data-paper-trash><span class="lang-zh">放进回收站</span><span class="lang-en">Put in bin</span></button>' +
+      '</div>' +
+    '</div>';
+
+  /* 桌面上的纸团层：每按一次「开始」就多一颗，散布在桌面左下角一带。 */
+  var ballLayer = document.createElement('div');
+  ballLayer.className = 'paper-layer';
+  ballLayer.setAttribute('role', 'group');
+  ballLayer.setAttribute('aria-label', '纸团 / Paper balls');
 
   var pile = document.createElement('div');
   pile.className = 'shutdown-layer';
@@ -103,8 +158,13 @@
 
   screen.appendChild(bootLayer);
   screen.appendChild(loginLayer);
+  screen.appendChild(trash);
   screen.appendChild(pile);
-  screen.appendChild(balloon);
+  screen.appendChild(paperDefs);
+  screen.appendChild(ballLayer);
+  screen.appendChild(paper);
+
+  var sheetEl = paper.querySelector('.paper-sheet');
 
   /* ---------- 小工具 ---------- */
 
@@ -122,18 +182,18 @@
   function writeSession(on) {
     try { if (on) sessionStorage.setItem(SESSION_KEY, 'on'); else sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
   }
-  function balloonSeen() {
-    try { return sessionStorage.getItem(BALLOON_KEY) === '1'; } catch (e) { return false; }
+  function paperSeen() {
+    try { return sessionStorage.getItem(PAPER_KEY) === '1'; } catch (e) { return false; }
   }
-  function markBalloonSeen() {
-    try { sessionStorage.setItem(BALLOON_KEY, '1'); } catch (e) {}
+  function markPaperSeen() {
+    try { sessionStorage.setItem(PAPER_KEY, '1'); } catch (e) {}
   }
-  function clearBalloonSeen() {
-    try { sessionStorage.removeItem(BALLOON_KEY); } catch (e) {}
+  function clearPaperSeen() {
+    try { sessionStorage.removeItem(PAPER_KEY); } catch (e) {}
   }
 
   /* ---------- 系统音效 ----------
-     三个声音都由振荡器现场合成：开机、收到信息、警告。
+     声音都由振荡器/噪声现场合成：开机、收到信息、警告、纸的沙沙声。
      共用一个 AudioContext —— 它必须在用户点击里被创建/唤醒，之后才能随时发声。 */
 
   var audioCtx = null;
@@ -203,6 +263,39 @@
     tone(ctx, 311.13 * lift, t + 0.15, 0.34, 0.026, 'sine');
   }
 
+  /* 纸的声音：一小段过带通的白噪声，前密后疏，像真的在揉一张纸。
+     kind='crumple' 更闷更久，'unfold' 更亮更短。 */
+  function rustleSound(kind) {
+    var ctx = soundCtx();
+    if (!ctx) return;
+    var dur = kind === 'crumple' ? 0.46 : 0.3;
+    var len = Math.max(1, Math.floor(ctx.sampleRate * dur));
+    var buffer = ctx.createBuffer(1, len, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < len; i++) {
+      var t = i / len;
+      /* 两个衰减叠在一起，做出“一下一下”的褶皱而不是一条平滑的噪音。 */
+      var env = Math.pow(1 - t, 1.5) * (0.55 + 0.45 * Math.abs(Math.sin(t * 34)));
+      data[i] = (Math.random() * 2 - 1) * env;
+    }
+    var src = ctx.createBufferSource();
+    src.buffer = buffer;
+    var bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = kind === 'crumple' ? 2200 : 3200;
+    bp.Q.value = 0.85;
+    var hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 850;
+    var gain = ctx.createGain();
+    gain.gain.value = kind === 'crumple' ? 0.18 : 0.13;
+    src.connect(bp);
+    bp.connect(hp);
+    hp.connect(gain);
+    gain.connect(ctx.destination);
+    src.start();
+  }
+
   /* ---------- 状态切换 ---------- */
 
   function setState(next) {
@@ -214,8 +307,8 @@
     else screen.removeAttribute('aria-hidden');
     bootLayer.hidden = next !== 'booting';
     loginLayer.hidden = next !== 'login';
-    if (next !== 'on') { closeBalloon(false); stopMusic(); }
-    if (off) closeBalloon(true);
+    if (next !== 'on') { hidePaper(); stopMusic(); }
+    if (off) hidePaper();
     updatePowerLabel();
   }
 
@@ -230,11 +323,11 @@
     power.disabled = state === 'booting';
   }
 
-  /* 开机进桌面后，在主页把说明气泡缓缓放出来（每次开机只放一次）。 */
+  /* 开机进桌面后，在主页先放一颗纸团（每次开机只放一次）。 */
   function greetOnHome() {
-    if (!isHomePage() || balloonSeen()) return false;
-    markBalloonSeen();
-    openBalloon(true);
+    if (!isHomePage() || paperSeen()) return false;
+    markPaperSeen();
+    spawnBall(false);
     return true;
   }
 
@@ -274,16 +367,437 @@
   function shutDown() {
     window.clearTimeout(bootTimer);
     writeSession(false);
-    closeBalloon(true);
+    hidePaper();
+    clearBalls();
     stopMusic(true);
     pile.replaceChildren();
     serial = 0;
     pile.hidden = true;
     delete root.dataset.pile;
-    clearBalloonSeen();
+    clearPaperSeen();
+    emptyTrash(true);
     setState('off');
     if (power) power.focus({ preventScroll: true });
     say('屏幕已关闭。按电源键重新开机。', 'Screen off. Press the power button to turn on.');
+  }
+
+  /* ---------- 纸团：每按一次「开始」掉一颗，点一下摊成说明纸 ----------
+     纸团可以有任意多颗，共用一张说明纸；揉皱的形态由 paper-3d.js 画在 3D 网格上，
+     这里只负责进出场、拖动、丢进回收站和焦点。 */
+
+  var balls = [];          /* { el, surface, open } */
+  var keyboardSpawn = false;
+  var openBall = null;     /* 当前摊开着的那一颗 */
+  var ballSeq = 0;
+  var UNFOLD_MS = 780;     /* 与参考视频 1.9s→2.7s 一致 */
+  var CRUMPLE_MS = 700;    /* 与参考视频 0.6s→1.35s 一致 */
+
+  function eachBall(fn) {
+    for (var i = balls.length - 1; i >= 0; i--) fn(balls[i], i);
+  }
+
+  /* 在新的一帧里把纸团从 A 状态推到 B 状态，逐帧重绘 3D 画布。 */
+  function animateBall(ball, from, to, duration, done) {
+    if (ball.raf) cancelAnimationFrame(ball.raf);
+    var startedAt = 0;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !ball.surface) {
+      ball.surface && ball.surface.paint(to);
+      if (done) done();
+      return;
+    }
+    function step(now) {
+      if (!startedAt) startedAt = now;
+      var k = Math.min(1, (now - startedAt) / duration);
+      ball.surface.paint(from + (to - from) * k);
+      if (k < 1) ball.raf = requestAnimationFrame(step);
+      else { ball.raf = 0; if (done) done(); }
+    }
+    ball.raf = requestAnimationFrame(step);
+  }
+
+  /* 纸团的位置：沿着桌面左下角一片随机落点，避开说明纸和回收站。 */
+  function scatterPoint() {
+    var area = screen.getBoundingClientRect();
+    var w = 78, h = 74;
+    var spanX = Math.max(0, area.width - w - 16);
+    var spanY = Math.max(0, area.height - h - 60);
+    /* 左下角优先，偶尔往中间偏一点，看起来像随手丢的 */
+    var x = 8 + Math.random() * Math.min(spanX, area.width * 0.62);
+    var y = 46 + Math.random() * spanY;
+    return { left: Math.round(x), top: Math.round(y) };
+  }
+
+  function spawnBall(animate) {
+    if (state !== 'on') return null;
+    var el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'paper-ball';
+    el.dataset.ball = String(ballSeq++);
+    el.setAttribute('aria-label', zh() ? '纸团：点击摊开' : 'Paper ball: click to unfold');
+    el.innerHTML =
+      '<canvas class="ball-canvas" width="240" height="240" aria-hidden="true"></canvas>' +
+      '<span class="ball-core" aria-hidden="true"></span>' +
+      '<span class="ball-shadow" aria-hidden="true"></span>';
+
+    var spot = scatterPoint();
+    el.style.left = spot.left + 'px';
+    el.style.top = spot.top + 'px';
+
+    var ball = { el: el, surface: null, raf: 0, open: false };
+    ballLayer.appendChild(el);
+
+    /* 有 WebGL 就画真纸团；没有就留下 CSS 的球当兜底。 */
+    if (window.Paper3D && window.Paper3D.available()) {
+      ball.surface = window.Paper3D.createSurface(el.querySelector('.ball-canvas'));
+      if (ball.surface) {
+        el.classList.add('has-3d');
+        ball.surface.paint(1);
+      }
+    }
+
+    balls.push(ball);
+    attachBall(ball);
+
+    if (animate !== false) {
+      el.classList.add('is-spawning');
+      rustleSound('crumple');
+      say('又掉下来一个纸团。', 'Another paper ball dropped in.');
+      el.addEventListener('animationend', function handle(event) {
+        if (event.target !== el) return;
+        el.classList.remove('is-spawning');
+        el.removeEventListener('animationend', handle);
+      });
+    }
+    /* 用鼠标点「开始」时不抢焦点：否则纸团上会挂一个虚线框。
+       键盘触发时（event.detail === 0）才把焦点交给它。 */
+    if (keyboardSpawn) el.focus({ preventScroll: true });
+    return ball;
+  }
+
+  /* 把说明纸放到这颗纸团旁边，并保证不越出屏幕。 */
+  function placeSheet(ball) {
+    var screenRect = screen.getBoundingClientRect();
+    var ballRect = ball.el.getBoundingClientRect();
+    paper.hidden = false;
+    /* 说明纸是复用的同一个节点：被丢进回收站时 tossToTrash 写过内联的
+       opacity / transform，不清理的话内联值会一直压住样式表，纸永远是透明的。 */
+    paper.style.opacity = '';
+    paper.style.transform = '';
+    paper.style.left = '';
+    paper.style.top = '';
+    paper.style.right = '';
+    paper.style.bottom = '';
+    /* 窄屏上说明纸几乎占满宽度：这时位置由屏幕决定，而不是由纸团决定，
+       否则纸团的随机位置会把纸推出屏幕外。 */
+    var narrow = screenRect.width < 620;
+    var w = narrow ? screenRect.width - 16 : Math.min(paper.offsetWidth, screenRect.width - 16);
+    paper.style.width = Math.round(w) + 'px';
+    var h = paper.offsetHeight;
+    var x = narrow ? 8 : ballRect.left - screenRect.left;
+    var y = ballRect.top - screenRect.top - h - 10;
+    x = Math.max(8, Math.min(x, screenRect.width - w - 8));
+    if (y < 8) y = Math.min(ballRect.bottom - screenRect.top + 10, screenRect.height - h - 52);
+    paper.style.left = Math.round(x) + 'px';
+    paper.style.top = Math.round(y) + 'px';
+    paper.style.bottom = 'auto';
+  }
+
+  function unfoldBall(ball) {
+    if (state !== 'on' || !ball) return;
+    /* 已经有一张摊开着：把上一颗立即收成团，说明纸直接换位置，
+       不再演一遍“揉回去再摊开”，否则中间会闪出一张半透明的纸。 */
+    if (openBall && openBall !== ball) {
+      var prev = openBall;
+      prev.open = false;
+      prev.el.classList.remove('is-flat', 'is-opening');
+      animateBall(prev, 0, 1, CRUMPLE_MS);
+    }
+    ball.open = true;
+    openBall = ball;
+    ball.el.classList.add('is-opening');
+    placeSheet(ball);
+    sheetEl.setAttribute('aria-hidden', 'false');
+    sheetEl.removeAttribute('inert');
+
+    animateBall(ball, 1, 0, UNFOLD_MS, function () {
+      if (state !== 'on') return;
+      ball.el.classList.add('is-flat');
+      rustleSound('unfold');
+      say('纸摊开了。', 'The paper is flat now.');
+      sheetEl.focus({ preventScroll: true });
+    });
+    /* 等一帧再挂上“摊开”状态：元素刚从 hidden 变成可见时，
+       同一帧里改样式浏览器不会启动过渡，纸会一直停在起始的透明状态。
+       先强制一次重排，让起始值真正生效。 */
+    requestAnimationFrame(function () {
+      void paper.offsetWidth;
+      if (state === 'on' && openBall === ball) paper.classList.add('is-revealed');
+    });
+  }
+
+  function crumplePaper(silent) {
+    if (state !== 'on' || !openBall) return;
+    var ball = openBall;
+    openBall = null;
+    ball.open = false;
+    paper.classList.remove('is-revealed');
+    sheetEl.setAttribute('aria-hidden', 'true');
+    sheetEl.setAttribute('inert', '');
+    ball.el.classList.remove('is-flat', 'is-opening');
+    animateBall(ball, 0, 1, CRUMPLE_MS);
+    if (!silent) {
+      rustleSound('crumple');
+      say('纸又被揉成一团。', 'The paper is a ball again.');
+      ball.el.focus({ preventScroll: true });
+    }
+    window.setTimeout(function () {
+      if (openBall) return;
+      paper.hidden = true;
+      paper.style.left = '';
+      paper.style.top = '';
+    }, CRUMPLE_MS);
+  }
+
+  function hidePaper() {
+    paper.hidden = true;
+    paper.classList.remove('is-revealed', 'is-tossed');
+    paper.style.opacity = '';
+    paper.style.transform = '';
+    paper.style.left = '';
+    paper.style.top = '';
+    sheetEl.setAttribute('aria-hidden', 'true');
+    sheetEl.setAttribute('inert', '');
+    openBall = null;
+  }
+
+  function clearBalls() {
+    balls.slice().forEach(function (ball) {
+      if (ball.raf) cancelAnimationFrame(ball.raf);
+      if (ball.el.parentNode) ball.el.remove();
+    });
+    balls.length = 0;
+  }
+
+  function removeBall(ball) {
+    if (ball.raf) cancelAnimationFrame(ball.raf);
+    var i = balls.indexOf(ball);
+    if (i >= 0) balls.splice(i, 1);
+    if (ball.el.parentNode) ball.el.remove();
+    if (openBall === ball) hidePaper();
+  }
+
+  function discardPaper() {
+    var ball = openBall;
+    if (!ball) return;
+    var target = paper;
+    tossToTrash(target, function () {
+      hidePaper();
+      stopMusic(true);
+      removeBall(ball);
+    });
+  }
+
+  /* 每颗纸团自己的点击 / 拖动。 */
+  function attachBall(ball) {
+    ball.el.addEventListener('click', function (event) {
+      if (Date.now() < suppressClickUntil) return;
+      event.preventDefault();
+      if (ball.open) return;
+      if (!ball.surface) {
+        /* 没有 3D 时也要能打开：直接摊开说明纸。 */
+        ball.open = true;
+        openBall = ball;
+        placeSheet(ball);
+        paper.classList.add('is-revealed');
+        sheetEl.setAttribute('aria-hidden', 'false');
+        sheetEl.removeAttribute('inert');
+        rustleSound('unfold');
+        sheetEl.focus({ preventScroll: true });
+        return;
+      }
+      unfoldBall(ball);
+    });
+
+    ball.el.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (event.target !== ball.el) return;
+      event.preventDefault();
+      ball.el.click();
+    });
+
+    attachDrag(ball.el, ball.el, function () { removeBall(ball); });
+  }
+
+  /* ---------- 回收站 ---------- */
+
+  var trashCount = 0;
+  var lastDropAt = 0;
+
+  function emptyTrash(silent) {
+    if (!trashCount) return;
+    trashCount = 0;
+    trash.classList.remove('is-full', 'is-bumped', 'is-over');
+    trash.setAttribute('aria-label', zh() ? '回收站：空' : 'Recycle Bin: empty');
+    if (!silent) {
+      toneFromTrash();
+      say('回收站清空了。', 'The bin is empty again.');
+    }
+  }
+
+  function toneFromTrash() {
+    var ctx = soundCtx();
+    if (!ctx) return;
+    var t = ctx.currentTime + 0.01;
+    tone(ctx, 392, t, 0.2, 0.06, 'triangle');
+    tone(ctx, 261.63, t + 0.06, 0.3, 0.05, 'triangle');
+  }
+
+  function fillTrash(n) {
+    trashCount = Math.max(1, trashCount + (n || 1));
+    trash.classList.add('is-full');
+    trash.classList.remove('is-bumped');
+    void trash.offsetWidth;
+    trash.classList.add('is-bumped');
+    trash.setAttribute('aria-label', zh() ? '回收站：有内容，点击清空' : 'Recycle Bin: has items, click to empty');
+    toneFromTrash();
+  }
+
+  function overTrash(x, y) {
+    var r = trash.getBoundingClientRect();
+    return x >= r.left - TRASH_PAD && x <= r.right + TRASH_PAD &&
+           y >= r.top - TRASH_PAD && y <= r.bottom + TRASH_PAD;
+  }
+
+  /* 一件东西被扔进回收站：先朝桶口收拢、淡出，再真的从 DOM 里消失。 */
+  function tossToTrash(el, done) {
+    var binRect = trash.getBoundingClientRect();
+    var rect = el.getBoundingClientRect();
+    var dx = (binRect.left + binRect.width / 2) - (rect.left + rect.width / 2);
+    var dy = (binRect.top + binRect.height / 2) - (rect.top + rect.height / 2);
+    el.classList.add('is-tossed');
+    el.style.transform = 'translate(' + Math.round(dx) + 'px,' + Math.round(dy) + 'px) scale(.24) rotate(-18deg)';
+    el.style.opacity = '0';
+    window.setTimeout(function () {
+      if (typeof done === 'function') done();
+      else if (el.parentNode) el.remove();
+    }, TOSS_MS);
+    fillTrash(1);
+    lastDropAt = Date.now();
+    say('已经放进回收站。', 'Dropped into the bin.');
+  }
+
+  /* ---------- 拖动：纸团、说明纸、警告窗、页面窗口共用一套 ---------- */
+
+  /* 把任意一个绝对定位的东西“钉”成 left/top，之后拖动就好算。
+     inset 定位的 .dialog-page 也要先换算成像素，否则一拖就跳回原位。 */
+  function pinElement(el) {
+    var screenRect = screen.getBoundingClientRect();
+    if (!el.dataset.pinned) {
+      var rect = el.getBoundingClientRect();
+      el.style.position = 'absolute';
+      el.style.inset = 'auto';
+      el.style.left = Math.round(rect.left - screenRect.left) + 'px';
+      el.style.top = Math.round(rect.top - screenRect.top) + 'px';
+      el.style.width = Math.round(rect.width) + 'px';
+      /* 页面窗口平时靠 flex 撑满；一旦脱离文档流就必须自己给出高度，
+         否则内部滚动区没有高度可算。 */
+      if (el.classList.contains('dialog-page')) el.style.height = Math.round(rect.height) + 'px';
+      el.dataset.pinned = '1';
+    }
+    /* 之后每次拎起来都从当前左上角重新起算，translate 归零。 */
+    el.style.transform = '';
+  }
+
+  /* handle 负责发起，target 是被搬动的那一块，onTrash 决定丢进桶里之后干什么。 */
+  function attachDrag(handle, target, onTrash) {
+    if (!handle || !target) return;
+    var drag = null;
+
+    /* 指针按下时只在 record 里记下起点。真正的移动/抬起挂在 document 上（捕获阶段），
+       这样即使指针滑出窗口、或者目标被重新布局，事件也不会丢。 */
+    function record(event) {
+      if (event.button !== 0) return;
+      /* 控件上按下就不要拖：但把手本身可能就是那个控件（纸团就是一个按钮）。 */
+      var control = event.target.closest('button, a, input, select, textarea');
+      if (control && control !== handle) return;
+      if (!target.isConnected) return;
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false,
+               lastX: event.clientX, lastY: event.clientY };
+      document.addEventListener('pointermove', move, true);
+      document.addEventListener('pointerup', finish, true);
+      document.addEventListener('pointercancel', finish, true);
+    }
+
+    function stop() {
+      drag = null;
+      document.removeEventListener('pointermove', move, true);
+      document.removeEventListener('pointerup', finish, true);
+      document.removeEventListener('pointercancel', finish, true);
+    }
+
+    function move(event) {
+      if (!drag || event.pointerId !== drag.id) return;
+      var dx = event.clientX - drag.x;
+      var dy = event.clientY - drag.y;
+      if (!drag.moved) {
+        if (Math.abs(dx) + Math.abs(dy) < DRAG_THRESHOLD) return;
+        drag.moved = true;
+        pinElement(target);
+        /* 拖动期间停掉纸团的待机晃动：动画会持续改写 transform，
+           浏览器会把正在进行的手势当成取消。 */
+        /* 只改这一块自己的样式：拖动中不要动 body 或 touch-action，
+           否则浏览器会认为手势换了归属，直接发 pointercancel。 */
+        target.classList.add('is-dragging', 'is-held');
+      }
+      /* 已经拎起来了：这一下算拖动，不算点击。 */
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+      target.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      trash.classList.toggle('is-over', overTrash(drag.lastX, drag.lastY));
+    }
+
+    function finish(event) {
+      if (!drag || event.pointerId !== drag.id) return;
+      var moved = drag.moved;
+      /* 系统级的取消（手势被别的层接走、指针移出窗口）也按“松手”处理：
+         否则东西会卡在半空中，而且这一次拖拽白做。 */
+      /* pointercancel 的坐标常常是 0,0，不能拿来当落点。 */
+      var x = event.type === 'pointercancel' ? drag.lastX : event.clientX;
+      var y = event.type === 'pointercancel' ? drag.lastY : event.clientY;
+      stop();
+      target.classList.remove('is-dragging');
+      /* 松手后等一拍再恢复晃动，避免同一帧里又改 transform。 */
+      window.setTimeout(function () { target.classList.remove('is-held'); }, 60);
+      trash.classList.remove('is-over');
+      if (!moved) return;             /* 只是点了一下，交给 click 处理 */
+      suppressClickUntil = Date.now() + 350;
+      if (overTrash(x, y)) {
+        tossToTrash(target, onTrash);
+        return;
+      }
+      /* 停下来的地方就是新家：把 translate 结算进 left/top，保证布局正确。 */
+      var m = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(target.style.transform || '');
+      if (m) {
+        target.style.left = Math.round(parseFloat(target.style.left || '0') + parseFloat(m[1])) + 'px';
+        target.style.top = Math.round(parseFloat(target.style.top || '0') + parseFloat(m[2])) + 'px';
+      }
+      target.style.transform = '';
+    }
+
+    handle.addEventListener('pointerdown', record);
+
+    /* 浏览器自带的原生拖放会抢走手势，并立刻发出 pointercancel。
+       桌面上的一切都由我们自己搬，所以原生拖放一律关掉。 */
+    handle.addEventListener('dragstart', function (event) { event.preventDefault(); });
+
+    /* 键盘替代：焦点在窗口里时按 Delete 就是“扔进回收站”。 */
+    target.addEventListener('keydown', function (event) {
+      if (event.key !== 'Delete' && event.key !== 'Backspace') return;
+      if (event.target.closest('input, textarea, [contenteditable="true"]')) return;
+      event.preventDefault();
+      tossToTrash(target, onTrash);
+    });
   }
 
   /* ---------- 关机游戏：警告窗只会越点越多，直到铺满整个屏幕 ---------- */
@@ -313,6 +827,8 @@
     if (!area.width || !area.height) return;
     for (var i = 0; i < kids.length; i++) {
       var win = kids[i];
+      /* 被用户亲手拎过的窗口不再重新排位置。 */
+      if (win.dataset.pinned) continue;
       if (win.dataset.randomX === undefined) {
         win.dataset.randomX = String(Math.random());
         win.dataset.randomY = String(Math.random());
@@ -337,7 +853,7 @@
     win.setAttribute('aria-labelledby', 'shutdown-title-' + n);
     win.setAttribute('aria-describedby', 'shutdown-message-' + n);
     win.innerHTML =
-      '<div class="shutdown-titlebar">' +
+      '<div class="shutdown-titlebar" data-drag-handle>' +
         '<i class="ico ico-pc" aria-hidden="true"></i>' +
         '<span class="shutdown-title" id="shutdown-title-' + n + '"><span class="lang-zh">关闭计算机</span><span class="lang-en">Shut Down Computer</span></span>' +
         '<button type="button" class="shutdown-control" aria-label="最小化 / Minimize" style="background-image:var(--g-min)"></button>' +
@@ -353,6 +869,8 @@
         '<button type="button" class="classic-btn"><span class="lang-zh">取消</span><span class="lang-en">Cancel</span></button>' +
       '</div>';
     pile.appendChild(win);
+    /* 标题栏可以拎起来，丢到回收站就消失。 */
+    attachDrag(win.querySelector('[data-drag-handle]'), win, function () { win.remove(); });
     return win;
   }
 
@@ -380,11 +898,12 @@
   }
 
   /* 弹窗堆起来的时候，站内链接不再跳转，而是继续增殖——想从窗口里逃出去是不行的。
-     只有左下角的「开始」能真正清空它们并黑屏。 */
+     只有电源键能真正关机并黑屏。 */
   function guardNavigation(event) {
     if (state !== 'on' || pileSize() === 0) return;
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (Date.now() - lastDropAt < 400) return;
     var link = event.target.closest ? event.target.closest('a[href]') : null;
     if (!link) return;
     var href = link.getAttribute('href') || '';
@@ -425,8 +944,8 @@
   }
 
   function setMusicState(playing) {
-    var box = balloon.querySelector('[data-music-state]');
-    var btn = balloon.querySelector('[data-gift-play]');
+    var box = paper.querySelector('[data-music-state]');
+    var btn = paper.querySelector('[data-gift-play]');
     if (box) box.dataset.musicState = playing ? 'playing' : 'idle';
     if (btn) {
       btn.setAttribute('aria-pressed', String(playing));
@@ -458,7 +977,7 @@
     resumeArmed = true;
     var once = function (event) {
       /* 点礼物按钮本身交给它自己的处理函数，免得播放和暂停互相抵消。 */
-      if (event && event.target && event.target.closest && event.target.closest('.balloon-gift')) return;
+      if (event && event.target && event.target.closest && event.target.closest('.paper-gift')) return;
       document.removeEventListener('pointerdown', once, true);
       document.removeEventListener('keydown', once, true);
       resumeArmed = false;
@@ -501,17 +1020,61 @@
     if (document.visibilityState === 'hidden') saveMusic(true);
   });
 
+  /* ---------- 绑定 ---------- */
+
+  function bindPaper() {
+    /* 说明纸的抬头：点一下重新揉起来（拖动超过阈值则只是搬动）。 */
+    var head = paper.querySelector('[data-paper-handle]');
+    head.addEventListener('click', function (event) {
+      if (Date.now() < suppressClickUntil) return;
+      if (event.target.closest('button')) return;
+      var sel = window.getSelection && window.getSelection();
+      if (sel && !sel.isCollapsed) return;      /* 正在选字就别抢 */
+      crumplePaper(false);
+    });
+
+    var crumpleBtn = paper.querySelector('[data-paper-crumple]');
+    if (crumpleBtn) {
+      crumpleBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        crumplePaper(false);
+      });
+    }
+
+    var trashBtn = paper.querySelector('[data-paper-trash]');
+    if (trashBtn) {
+      trashBtn.addEventListener('click', function (event) {
+        event.stopPropagation();
+        discardPaper();
+      });
+    }
+
+    /* 焦点在纸上时，Delete 也能把纸扔进回收站。 */
+    sheetEl.addEventListener('keydown', function (event) {
+      if (event.key !== 'Delete' && event.key !== 'Backspace') return;
+      if (event.target.closest('input, textarea, [contenteditable="true"]')) return;
+      event.preventDefault();
+      discardPaper();
+    });
+
+    /* 说明纸自己也能被拎走，丢进回收站就收起来。 */
+    attachDrag(head, paper, discardPaper);
+  }
+
   function bindGift() {
-    var btn = balloon.querySelector('[data-gift-play]');
+    var btn = paper.querySelector('[data-gift-play]');
     if (!btn) return;
     btn.addEventListener('click', function () {
       if (!musicWanted) {
+        /* 重新打开礼物：从头开始放，不接着上次的位置。 */
         musicWanted = true;
+        try { audio.currentTime = 0; } catch (e) {}
         playMusic();
-        say('正在播放 Lullaby。', 'Playing Lullaby.');
+        say('正在播放 Lullaby。', 'Playing Lullaby, from the start.');
       } else if (audio.paused) {
+        try { audio.currentTime = 0; } catch (e) {}
         playMusic();
-        say('正在播放 Lullaby。', 'Playing Lullaby.');
+        say('正在播放 Lullaby。', 'Playing Lullaby, from the start.');
       } else {
         musicWanted = false;
         audio.pause();
@@ -521,48 +1084,23 @@
     });
   }
 
-  /* ---------- 系统气泡 ---------- */
+  /* 页面窗口（语录 / 项目 / 联系）也能被拎进回收站：丢进去就等于关上这扇窗。 */
+  function bindPageWindow() {
+    var win = screen.querySelector('.dialog-page');
+    if (!win || win.dataset.dragBound === '1') return;
+    var bar = win.querySelector('.dialog-titlebar');
+    if (!bar) return;
+    win.dataset.dragBound = '1';
+    attachDrag(bar, win, function () {
+      location.href = 'index.html';
+    });
+  }
 
-  function openBalloon(animate) {
-    if (state !== 'on') return;
-    balloon.hidden = false;
-    root.dataset.balloon = 'open';
-    if (animate) {
-      balloon.classList.remove('is-appearing');
-      void balloon.offsetWidth;      /* 强制重排，动画才能重播 */
-      balloon.classList.add('is-appearing');
-    }
-    var toggle = document.querySelector('[data-balloon-toggle]');
-    if (toggle) toggle.setAttribute('aria-pressed', 'true');
-  }
-  function closeBalloon(force) {
-    if (state !== 'on' && !force) return;
-    balloon.hidden = true;
-    balloon.classList.remove('is-appearing');
-    delete root.dataset.balloon;
-    var toggle = document.querySelector('[data-balloon-toggle]');
-    if (toggle) toggle.setAttribute('aria-pressed', 'false');
-    if (state === 'on') markBalloonSeen();
-  }
-  function bindBalloon() {
-    var toggle = document.querySelector('[data-balloon-toggle]');
-    var close = balloon.querySelector('[data-balloon-close]');
-    if (toggle) {
-      toggle.addEventListener('click', function () {
-        if (balloon.hidden) openBalloon(true);
-        else closeBalloon(false);
-      });
-    }
-    if (close) {
-      close.addEventListener('click', function (event) {
-        event.preventDefault();
-        closeBalloon(false);
-        var again = document.querySelector('[data-balloon-toggle]');
-        if (again) again.focus({ preventScroll: true });
-      });
-    }
-    balloon.addEventListener('animationend', function () {
-      balloon.classList.remove('is-appearing');
+  function bindTrash() {
+    trash.addEventListener('click', function () {
+      if (Date.now() < suppressClickUntil) return;
+      if (trashCount > 0) emptyTrash(false);
+      else say('回收站是空的。', 'The bin is empty.');
     });
   }
 
@@ -573,22 +1111,42 @@
     start = document.querySelector('[data-machine-start]');
     if (!power || !start) return false;
 
+    /* 电源键只管开机；开机状态下点它只弹警告窗，不再关机。 */
     power.addEventListener('click', function () {
       if (state === 'off') boot();
       else if (state === 'on') multiply(1);
     });
 
-    /* 关掉界面上任何一个按钮，都会再多出两个一样的窗口。 */
-    pile.addEventListener('click', function (event) {
-      if (event.target.closest('button')) multiply(2);
+    /* 「开始」：每按一次就掉一颗纸团，任何页面都算数。 */
+    start.addEventListener('click', function (event) {
+      if (state !== 'on') return;
+      keyboardSpawn = event.detail === 0;   /* 键盘触发的点击没有 detail */
+      spawnBall(true);
+      keyboardSpawn = false;
     });
 
-    start.addEventListener('click', shutDown);
+    /* 关掉警告窗上任何一个按钮，都会再多出两个一样的窗口。
+        拖拽丢进回收站的那一下不算点击。 */
+    pile.addEventListener('click', function (event) {
+      if (Date.now() < suppressClickUntil) return;
+      if (!event.target.closest('.shutdown-window')) return;
+      if (event.target.closest('button')) multiply(2);
+    });
 
     loginLayer.addEventListener('click', function (event) {
       if (event.target.closest('[data-machine-login]')) logIn();
     });
 
+    /* 系统托盘的信息键：现在才是真正的关机键。 */
+    var tray = document.querySelector('[data-machine-tray]');
+    if (tray) {
+      tray.addEventListener('click', function () {
+        if (state === 'on') shutDown();
+      });
+    }
+
+    /* 图片、文字被浏览器原生拖走同样会打断手势，整块屏幕禁掉。 */
+    screen.addEventListener('dragstart', function (event) { event.preventDefault(); });
     document.addEventListener('click', guardNavigation, true);
     window.addEventListener('resize', placeWindows);
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(placeWindows).observe(screen);
@@ -596,10 +1154,27 @@
       updatePowerLabel();
       setMusicState(!audio.paused);
       placeWindows();
+      /* 回收站的状态文案是运行时拼的，语言一换要重新生成。 */
+      trash.setAttribute('aria-label', trashCount > 0
+        ? (zh() ? '回收站：有内容，点击清空' : 'Recycle Bin: has items, click to empty')
+        : (zh() ? '回收站：空' : 'Recycle Bin: empty'));
+      eachBall(function (ball) {
+        ball.el.setAttribute('aria-label', ball.open
+          ? (zh() ? '纸团：已摊开' : 'Paper ball: unfolded')
+          : (zh() ? '纸团：点击摊开' : 'Paper ball: click to unfold'));
+      });
     }).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
     setMusicState(!audio.paused);
-    bindBalloon();
+
+    bindPageWindow();
+    /* 软导航只换掉窗口节点，任务栏不动；节点一换就得重新挂一次拖拽。 */
+    if (typeof MutationObserver !== 'undefined') {
+      new MutationObserver(bindPageWindow).observe(screen, { childList: true });
+    }
+
+    bindPaper();
     bindGift();
+    bindTrash();
     return true;
   }
 

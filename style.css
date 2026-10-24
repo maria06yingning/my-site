@@ -207,8 +207,10 @@ html[data-power="booting"] .dialog-page,
 html[data-power="login"] .dialog-page,
 html[data-power="booting"] #site-header,
 html[data-power="login"] #site-header,
-html[data-power="booting"] .balloon,
-html[data-power="login"] .balloon { visibility: hidden; }
+html[data-power="booting"] .paper,
+html[data-power="login"] .paper,
+html[data-power="booting"] .desktop-trash,
+html[data-power="login"] .desktop-trash { visibility: hidden; }
 
 /* ---------- 开机动画 ---------- */
 .boot-layer { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; background: #05070c; color: #d8e2f0; }
@@ -240,29 +242,81 @@ html:not([data-lang-chosen]) .login-layer .lang-zh,
 html:not([data-lang-chosen]) .login-layer .lang-en { display: block !important; }
 html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 
-/* ---------- 系统气泡：右下角，可关闭可重开 ---------- */
-.tray-balloon { display: grid; place-items: center; width: 22px; height: 22px; border: 0; padding: 0; background: transparent; }
-.tray-balloon[aria-pressed="true"] { background: #0000801f; box-shadow: var(--in); }
-.balloon { position: absolute; right: 10px; bottom: 50px; z-index: 28; width: min(300px, calc(100% - 20px)); padding: 3px; background: var(--face); box-shadow: var(--out), 3px 4px 0 #0005; }
-.balloon[hidden] { display: none; }
-/* 开机后自动弹出：像老系统那样从任务栏上方慢慢升起，不是“啪”一下出现。 */
-.balloon.is-appearing { animation: balloon-rise 620ms cubic-bezier(.22,.68,.24,1) both; }
-@keyframes balloon-rise {
-  from { opacity: 0; transform: translateY(18px) scale(.98); }
-  60% { opacity: 1; }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+/* ---------- 纸团 / 说明纸 ----------
+   纸团本体由 paper-3d.js 画在 3D 网格上；这里只管说明纸浮现时的缩放与模糊。
+   时长与缓动集中在这里，脚本里只引用同一条曲线。 */
+.paper {
+  --paper-w: min(324px, calc(100% - 22px));
+  max-width: calc(100% - 16px);
+  --paper-open-ms: 560ms;
+  /* 最后一下摊平更短：参考里团是“啪”地一下散开，再轻轻回弹。 */
+  --paper-snap-ms: 420ms;
+  --paper-settle: cubic-bezier(.22,.68,.24,1);
+  --paper-overshoot: cubic-bezier(.34,1.42,.6,1);
+  --paper-blur: 1.6px;
+  /* 纸团表面的 SVG 滤镜，定义在页面里的 #paper-relief。 */
+  --paper-relief: url(#paper-relief);
+  position: absolute;
+  left: 14px;
+  bottom: 52px;
+  z-index: 34;
+  width: var(--paper-w);
+  pointer-events: none;
 }
-@media (prefers-reduced-motion: reduce) { .balloon.is-appearing { animation-duration: 1ms; } }
-.balloon-arrow { position: absolute; right: 20px; bottom: -8px; width: 14px; height: 8px; background: var(--face); clip-path: polygon(0 0, 100% 0, 50% 100%); }
-.balloon-bar { display: flex; align-items: center; gap: 6px; padding: 4px 5px; background: linear-gradient(90deg,#000080,#1084d0); color: #fff; font: bold 12px var(--ui); }
-.balloon-bar .dtb-title { flex: 1; min-width: 0; }
-.balloon-x { display: grid; place-items: center; flex: none; width: 20px; height: 18px; border: 0; padding: 0; background: var(--face); box-shadow: var(--out); }
-.balloon-x:active { box-shadow: var(--in); }
-.balloon-body { margin-top: 3px; padding: 12px 13px; max-height: 44svh; overflow: auto; background: #fffbe6; box-shadow: var(--in); }
-.balloon-body p { margin: 0 0 10px; font-size: 12px; line-height: 1.75; color: #1a1a1a; }
-.balloon-body p:last-of-type { margin-bottom: 0; }
-/* 无文字的小礼物：盒盖随真实播放状态打开，暂停时合上。 */
-.balloon-gift { margin: 4px 0 0; }
+.paper > * { pointer-events: auto; }
+/* 没有摊开状态时，纸只作为“揉紧的整体”存在，看不见。 */
+.paper:not(.is-revealed) .paper-sheet { opacity: 0; pointer-events: none; }
+
+/* 半开的时候纸上还留着没抚平的折痕：几道细的明暗斜线，
+   越接近全开越淡，最后完全消失。不是给纸加边框，而是让它看起来“还没展平”。 */
+.paper-sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--paper-open-ms) linear;
+  background:
+    linear-gradient(96deg, transparent 0 26%, #b6ae9c55 26.3% 26.7%, #fffdf955 26.9% 27.6%, transparent 27.9%),
+    linear-gradient(-71deg, transparent 0 41%, #ada69455 41.3% 41.7%, #fffdf955 41.9% 42.6%, transparent 42.9%),
+    linear-gradient(58deg, transparent 0 61%, #b6ae9c55 61.3% 61.7%, #fffdf955 61.9% 62.6%, transparent 62.9%),
+    linear-gradient(-24deg, transparent 0 78%, #ada69455 78.3% 78.7%, #fffdf955 78.9% 79.6%, transparent 79.9%);
+}
+.paper.is-revealed .paper-sheet::after { opacity: .55; }
+.paper[hidden] { display: none; }
+.paper > * { pointer-events: auto; }
+
+/* 摊开后的纸本色：比气球的 #fffbe6 更旧一点，带一点纤维感的底色。 */
+.paper-sheet {
+  position: relative;
+  transform-origin: 50% 90%;
+  transition: transform var(--paper-open-ms) var(--paper-settle),
+              opacity 380ms linear,
+              filter var(--paper-open-ms) var(--paper-settle);
+}
+.paper-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  padding: 3px 5px;
+  background: linear-gradient(90deg,#000080,#1084d0);
+  color: #fff;
+  font: bold 12px var(--ui);
+  cursor: grab;
+  touch-action: none;
+}
+.paper-head:active { cursor: grabbing; }
+.paper-title { flex: 1; min-width: 0; }
+.paper-grip { font-size: 9px; font-weight: normal; color: #d6e4ff; letter-spacing: .2px; }
+.paper-body { padding: 14px 15px 10px; background: #fdfaf0; box-shadow: var(--in), 0 6px 14px #0003; }
+.paper-body p { margin: 0 0 10px; font-size: 12px; line-height: 1.75; color: #1a1a1a; }
+.paper-body p:last-of-type { margin-bottom: 0; }
+.paper-foot { display: flex; gap: 6px; margin-top: 3px; padding: 3px; background: var(--face); box-shadow: var(--out); }
+.paper-btn { flex: 1; min-height: 30px; font-size: 11px; }
+
+/* 礼物保持原样，只是换了容器。 */
+.paper-gift { margin: 4px 0 0; }
 .gift-play { display: inline-grid; place-items: center; width: 80px; height: 84px; padding: 0; border: 0; background: transparent; vertical-align: middle; touch-action: manipulation; }
 .gift-box { position: relative; display: block; width: 72px; height: 78px; }
 .gift-base { position: absolute; left: 15px; bottom: 8px; width: 44px; height: 32px; border: 2px solid #873659; background: linear-gradient(90deg,#ef82a9 0 38%,#ffe3a0 38% 61%,#df608f 61%); box-shadow: inset 2px 2px #ffb9d0, inset -2px -2px #b74473, 2px 2px #0002; }
@@ -275,11 +329,197 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 .gift-spark { position: absolute; right: 5px; top: 20px; color: #946126; font: bold 19px/1 Georgia,serif; opacity: 0; transform: translateY(8px); transition: opacity 350ms, transform 420ms; }
 .gift-play:hover .gift-base { filter: brightness(1.07); }
 .gift-play:active .gift-box { translate: 0 1px; }
-.balloon-gift[data-music-state="playing"] .gift-lid { transform: translate(-5px,-17px) rotate(-18deg); }
-.balloon-gift[data-music-state="playing"] .gift-glow { opacity: 1; }
-.balloon-gift[data-music-state="playing"] .gift-spark { opacity: 1; transform: translateY(0); }
-@media (prefers-reduced-motion: reduce) { .gift-lid, .gift-glow, .gift-spark { transition: none; } }
-.balloon-status { margin-top: 3px; padding: 2px 6px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; font-size: 10px; color: #3c3c3c; }
+.paper-gift[data-music-state="playing"] .gift-lid { transform: translate(-5px,-17px) rotate(-18deg); }
+.paper-gift[data-music-state="playing"] .gift-glow { opacity: 1; }
+.paper-gift[data-music-state="playing"] .gift-spark { opacity: 1; transform: translateY(0); }
+
+/* ---------- 桌面上的纸团 ----------
+   每颗纸团是一个按钮，里面一张 240×240 的画布装着 3D 渲出的揉皱纸张。
+   画布本身会被 CSS 缩到 78px，所以像素密度够，边缘也不糊。 */
+.paper-layer { position: absolute; inset: 0 0 44px; z-index: 27; pointer-events: none; }
+.paper-ball {
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: pointer;
+  transform-origin: 50% 70%;
+  transition: transform 460ms var(--paper-settle), opacity 320ms linear;
+}
+/* 静止时的轻微浮动：只动 transform，不触发重排。 */
+.paper-ball.has-3d .ball-canvas { animation: ball-idle 5200ms ease-in-out infinite; }
+.ball-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 60%;
+  filter: drop-shadow(1px 3px 2px #0005);
+}
+/* 兜底：没有 WebGL 时用 CSS 画的球，形状和一个煎过的纸团差不多。 */
+.paper-ball.has-3d .ball-core,
+.paper-ball.has-3d .ball-crease { display: none; }
+.ball-core {
+  position: absolute;
+  inset: 6%;
+  background: #f2efe3;
+  clip-path: polygon(37% 2%, 55% 0%, 69% 6%, 83% 3%, 96% 18%, 99% 36%, 93% 50%, 100% 65%, 92% 80%, 78% 92%, 63% 99%, 47% 95%, 32% 100%, 18% 90%, 5% 78%, 0% 60%, 4% 44%, 0% 28%, 11% 14%, 23% 5%);
+  filter: var(--paper-relief) drop-shadow(2px 5px 3px #0006);
+  animation: ball-idle 5200ms ease-in-out infinite;
+}
+.ball-crease {
+  position: absolute;
+  inset: 13%;
+  pointer-events: none;
+  opacity: .34;
+  border-radius: 44%;
+  filter: blur(.4px);
+  background:
+    linear-gradient(82deg, transparent 0 34%, #968f7e 34.5% 35.4%, #fffdf6 36% 37.2%, transparent 37.8%),
+    linear-gradient(116deg, transparent 0 56%, #9a9382 56.5% 57.4%, #fffdf7 58% 59.2%, transparent 59.8%),
+    linear-gradient(-42deg, transparent 0 63%, #a29b8a 63.5% 64.4%, #fffef8 65% 66.2%, transparent 66.8%);
+}
+/* 影子单独一层：摊平时变大变淡，团起来时收紧变深，体积感来自这里。 */
+.ball-shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 2%;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, #0000004d, #00000014 55%, transparent 72%);
+  filter: blur(2px);
+  transform: scale(.78);
+  transition: transform 700ms var(--paper-settle), opacity 700ms linear;
+  pointer-events: none;
+}
+.paper-ball.is-flat .ball-shadow { transform: scale(1.22); opacity: .42; }
+/* 摊开的那一颗不再显示纸团本体，位置让给说明纸。 */
+.paper-ball.is-flat .ball-canvas,
+.paper-ball.is-flat .ball-core,
+.paper-ball.is-flat .ball-crease { opacity: 0; transition: opacity 200ms linear; }
+/* 从屏幕左边甩进来。 */
+.paper-ball.is-spawning { animation: ball-toss 620ms var(--paper-settle) both; }
+@keyframes ball-toss {
+  0% { transform: translate(-120px, -40px) rotate(-28deg) scale(.7); opacity: 0; }
+  55% { opacity: 1; }
+  78% { transform: translate(4px, 2px) rotate(4deg) scale(1.03); }
+  100% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+}
+.paper-ball.is-dragging { z-index: 38 !important; }
+/* 鼠标点出来的焦点框没有意义，键盘用户仍能看到轮廓。 */
+.paper-ball:focus:not(:focus-visible) { outline: none; }
+
+@keyframes ball-idle {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+
+/* 说明纸的出现在 JS 里与 3D 纸团同步：纸团摊到一半时纸开始浮现，
+   摊平的那一刻正好落在原位，看起来是同一张纸被展开。 */
+/* 说明纸的默认态就是“正常可见”。
+   收起时的缩放/模糊交给一次性动画，而不是常驻的 transition：
+   过渡一旦没被启动，纸就会永远停在透明，而动画结束必然落在最终帧。 */
+.paper-sheet { transform: none; opacity: 1; filter: none; }
+.paper.is-revealed .paper-sheet { animation: sheet-unfold var(--paper-open-ms) var(--paper-settle) both; }
+@keyframes sheet-unfold {
+  0% { transform: scale(.46) rotate(-6deg) translateY(14px); opacity: 0; filter: blur(var(--paper-blur)); }
+  62% { transform: scale(1.015) rotate(.5deg) translateY(-2px); opacity: 1; filter: blur(0); }
+  100% { transform: none; opacity: 1; filter: none; }
+}
+@media (prefers-reduced-motion: reduce) { .paper.is-revealed .paper-sheet { animation-duration: 1ms; } }
+
+/* 落地那一下：从左边甩进来，再轻轻回弹，像纸被丢到桌上。 */
+/* 被拎着走的时候不要有过渡，否则跟手会慢半拍。 */
+.paper.is-dragging { z-index: 37; }
+/* 被拎起来的纸团先停止待机晃动，松手后再接上。 */
+.paper.is-dragging .paper-sheet,
+.paper-ball.is-dragging,
+.shutdown-window.is-dragging,
+.dialog-page.is-dragging { transition: none; }
+.paper.is-tossed,
+.shutdown-window.is-tossed,
+.dialog-page.is-tossed {
+  transition: transform 380ms cubic-bezier(.5,0,.75,0), opacity 380ms ease-in !important;
+  pointer-events: none;
+}
+
+/* ---------- 回收站 ----------
+   桌面上的一只铁皮桶。空的时候是灰的，装进东西后换成另一只图标并轻跳一下。
+   它同时是拖拽的落点，所以 hover / 拖拽悬停时给一圈可见的反馈。 */
+.desktop-trash {
+  position: absolute;
+  right: 14px;
+  bottom: 52px;
+  /* 高于警告窗堆（30）：拖动时指针在回收站上就必须能落进去，不能被别的窗口挡住。 */
+  z-index: 36;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 56px;
+  min-height: 56px;
+  padding: 4px 3px 3px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-shadow: 0 0 3px #000c, 1px 1px 1px #0008;
+  touch-action: manipulation;
+}
+.desktop-trash-ico {
+  display: block;
+  width: 34px;
+  height: 34px;
+  background: var(--i-trash) center/contain no-repeat;
+  image-rendering: pixelated;
+  filter: drop-shadow(1px 1px 0 #0005);
+  transition: transform 220ms var(--paper-settle);
+}
+.desktop-trash-label { font-size: 10px; line-height: 1.2; }
+.desktop-trash:hover .desktop-trash-ico,
+.desktop-trash:focus-visible .desktop-trash-ico { transform: translateY(-1px) scale(1.05); }
+.desktop-trash.is-full .desktop-trash-ico { background-image: var(--i-trash-full); }
+.desktop-trash.is-bumped .desktop-trash-ico { animation: trash-bump 420ms var(--paper-settle); }
+@keyframes trash-bump {
+  0% { transform: scale(1); }
+  38% { transform: scale(1.22) rotate(-6deg); }
+  70% { transform: scale(.96) rotate(3deg); }
+  100% { transform: scale(1); }
+}
+/* 拖着东西压在桶上：一圈虚线，像老系统的拖放高亮。 */
+.desktop-trash.is-over {
+  background: #ffffff2e;
+  outline: 2px dotted #fff;
+  outline-offset: -3px;
+}
+.desktop-trash.is-over .desktop-trash-ico { transform: scale(1.14); }
+
+/* ---------- 警告窗：标题栏可以拎起来 ---------- */
+.shutdown-titlebar { cursor: grab; touch-action: none; }
+.shutdown-titlebar:active { cursor: grabbing; }
+/* 被拎起来的窗口要压过同层的其它窗口。 */
+.shutdown-window.is-dragging { z-index: 5; }
+
+/* 托盘上的信息键现在是警告窗的触发按钮，按下去有老系统那种压感。
+   可见图标只有 22px，但可点面积外扩到 44px（见 ::after）。 */
+.tray-balloon { position: relative; display: grid; place-items: center; width: 22px; height: 22px; border: 0; padding: 0; background: transparent; }
+.tray-balloon::after { content: ''; position: absolute; inset: -11px; }
+.tray-balloon:hover { background: #00008014; }
+.tray-balloon:active { box-shadow: var(--in); }
+
+@media (prefers-reduced-motion: reduce) {
+  .paper, .paper-sheet, .paper-ball, .gift-lid, .gift-glow, .gift-spark, .desktop-trash-ico {
+    transition-duration: 1ms !important;
+  }
+  .ball-core { animation: none; }
+  .paper.is-spawning { animation-duration: 1ms; }
+  .paper-ball.is-spawning { animation-duration: 1ms; }
+  .desktop-trash.is-bumped .desktop-trash-ico { animation-duration: 1ms; }
+  .paper.is-tossed, .shutdown-window.is-tossed, .dialog-page.is-tossed { transition-duration: 1ms !important; }
+}
 
 /* ---------- 今日一句：主窗口里的一段，不是第二个窗口 ---------- */
 .today { margin: 4px 0 20px; padding: 0 0 15px; border-bottom: 1px solid #b8b8b8; }
@@ -291,7 +531,8 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
 .today-all { display: inline-flex; align-items: center; color: #111; text-decoration: none; }
 
 /* ---------- 关机警告窗口堆 ----------
-   层级要高于系统气泡（28），否则窄屏上气泡会盖住警告窗的按钮；
+   层级夹在纸面（26/34）与回收站（27）之间：纸团被拎起来时要能盖住窗口，
+   而窗口拖到回收站上面时又不会被纸面挡住按钮；
    仍低于开机动画（40）和登录层（39）。 */
 .shutdown-layer { position: absolute; inset: 0 0 44px; z-index: 30; pointer-events: none; }
 .shutdown-window { position: absolute; width: min(330px, calc(100% - 8px)); max-height: calc(100% - 8px); overflow: auto; padding: 3px; background: #c0c0c0; color: #111; box-shadow: var(--out), 3px 4px 0 #0005; pointer-events: auto; }
@@ -326,8 +567,12 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
   .step-fog { min-height: 38px; }
   .dialog-page, .page-contact .dialog-page { inset: 10px 8px 56px; }
   .dialog-page.is-maximized, .page-contact .dialog-page.is-maximized { inset: 0 0 44px; }
-  .balloon { right: 6px; bottom: 52px; }
-  .balloon-body { max-height: 40svh; }
+  /* 手机上说明纸跟随 JS 给的 left，但宽度不能超过屏幕。 */
+  .paper { --paper-w: calc(100% - 16px); }
+  .paper-body { max-height: 42svh; overflow: auto; overscroll-behavior: contain; }
+  .desktop-trash { right: 8px; bottom: 54px; }
+  .desktop-trash-ico { width: 30px; height: 30px; }
+  .desktop-trash-label { font-size: 9px; }
   .gift-play { width: 80px; height: 84px; }
   .shutdown-layer { inset: 0 0 44px; }
   .shutdown-control { width: 28px; height: 27px; }

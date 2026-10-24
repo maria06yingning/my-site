@@ -26,7 +26,7 @@
     '    <li><a href="contact.html" data-page="contact.html"><i class="ico ico-mail" aria-hidden="true"></i><span class="lang-zh">联系</span><span class="lang-en">Contact</span></a></li>\n' +
     '  </ul>\n' +
     '  <div class="system-tray">\n' +
-    '    <button class="tray-balloon" type="button" data-balloon-toggle aria-label="网站简介 / About this site" aria-pressed="false"><i class="ico ico-info" aria-hidden="true"></i></button>\n' +
+    '    <button class="tray-balloon" type="button" data-machine-tray aria-label="关闭计算机 / Shut down"><i class="ico ico-info" aria-hidden="true"></i></button>\n' +
     '    <div class="lang-toggle" role="group" aria-label="语言"><button type="button" data-lang="zh" aria-label="中文">中</button><button type="button" data-lang="en" aria-label="English">EN</button></div>\n' +
     '    <time class="clock" aria-label="本地时间">--:--</time>\n' +
     '  </div>\n' +

@@ -499,6 +499,7 @@
     x = Math.max(8, Math.min(x, screenRect.width - w - 8));
     if (y < 8) y = Math.min(ballRect.bottom - screenRect.top + 10, screenRect.height - h - 52);
     paper.style.left = Math.round(x) + 'px';
+    y = Math.max(4, Math.min(y, Math.max(4, screenRect.height - h - 48)));
     paper.style.top = Math.round(y) + 'px';
     paper.style.bottom = 'auto';
   }
@@ -1104,6 +1105,57 @@
     });
   }
 
+  /* 跟手箭头只是视觉层：所有监听都是被动的，不拦截点击、滚动和拖动。
+     原生滚动会取消 pointer 事件，因此用 touchmove 继续跟踪滚动中的手指。 */
+  function bindTouchCursor() {
+    var cursor = document.createElement('span');
+    cursor.className = 'touch-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(cursor);
+    var timer = 0;
+    var frame = 0;
+    var point = null;
+    function hide() {
+      clearTimeout(timer);
+      point = null;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      cursor.classList.remove('is-visible');
+    }
+    function paint() {
+      frame = 0;
+      if (!point) return;
+      var r = screen.getBoundingClientRect();
+      if (state === 'off' || point.x < r.left || point.x > r.right || point.y < r.top || point.y > r.bottom) {
+        hide(); return;
+      }
+      var x = Math.max(r.left, Math.min(r.right - 22, point.x + 8));
+      var y = Math.max(r.top, Math.min(r.bottom - 28, point.y - 30));
+      cursor.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      cursor.classList.add('is-visible');
+    }
+    function move(event) {
+      if (event.touches.length !== 1) { hide(); return; }
+      clearTimeout(timer);
+      var t = event.touches[0];
+      point = { x: t.clientX, y: t.clientY };
+      if (!frame) frame = requestAnimationFrame(paint);
+    }
+    function release(event) {
+      if (event.touches.length) { hide(); return; }
+      timer = setTimeout(hide, 650);
+    }
+    document.addEventListener('touchstart', move, { passive: true });
+    document.addEventListener('touchmove', move, { passive: true });
+    document.addEventListener('touchend', release, { passive: true });
+    document.addEventListener('touchcancel', hide, { passive: true });
+    window.addEventListener('blur', hide);
+    window.addEventListener('resize', hide);
+    document.addEventListener('visibilitychange', hide);
+    new MutationObserver(function () { if (state === 'off') hide(); })
+      .observe(root, { attributes: true, attributeFilter: ['data-power'] });
+  }
+
   /* ---------- 绑定 ---------- */
 
   function bind() {
@@ -1175,6 +1227,7 @@
     bindPaper();
     bindGift();
     bindTrash();
+    bindTouchCursor();
     return true;
   }
 

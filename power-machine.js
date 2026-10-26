@@ -1129,8 +1129,12 @@
       if (state === 'off' || point.x < r.left || point.x > r.right || point.y < r.top || point.y > r.bottom) {
         hide(); return;
       }
-      var x = Math.max(r.left, Math.min(r.right - 22, point.x + 8));
-      var y = Math.max(r.top, Math.min(r.bottom - 28, point.y - 30));
+      /* 钳制量取自光标自身盒子，而不是再写一遍尺寸常量：
+         改 --touch-cursor-size 时光标不会一半探出屏幕外壳。 */
+      var cw = cursor.offsetWidth || 22;
+      var ch = cursor.offsetHeight || 28;
+      var x = Math.max(r.left, Math.min(r.right - cw, point.x + 8));
+      var y = Math.max(r.top, Math.min(r.bottom - ch, point.y - 30));
       cursor.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
       cursor.classList.add('is-visible');
     }

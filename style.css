@@ -65,7 +65,7 @@ html:not([data-lang="zh"]) .lang-zh, html[data-lang="zh"] .lang-en { display: no
 /* Real readable windows, not dark overlays or absolutely positioned cards. */
 .dialog-page { position: absolute; inset: 24px 28px 61px; display: flex; justify-content: center; align-items: stretch; z-index: 2; }
 .dialog-win { display: flex; flex-direction: column; width: 100%; min-width: 0; padding: 3px; background: var(--face); box-shadow: var(--out), 3px 4px 0 #0005; }
-.dialog-titlebar, .titlebar { display: flex; align-items: center; gap: 6px; flex: none; padding: 3px 4px; min-height: 26px; background: linear-gradient(90deg,#000080,#1084d0); color: #fff; font-size: 12px; font-weight: bold; }
+.dialog-titlebar, .titlebar { display: flex; align-items: center; gap: 6px; flex: none; padding: 3px 4px; min-height: 26px; background: linear-gradient(90deg,#000080,#1084d0); color: #fff; font-size: 12px; font-weight: bold; touch-action: none; }
 .dtb-icon { width: 16px; height: 16px; flex: none; }
 .dtb-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dtb-btns { display: flex; gap: 3px; }
@@ -578,8 +578,10 @@ html:not([data-lang-chosen]) .login-layer .lang-en { margin-top: 3px; }
   --touch-cursor-fade: 140ms;
 }
 @media (max-width: 600px), (max-width: 950px) and (max-height: 500px) {
-  /* 显式轨道：.computer 用了容器查询（尺寸包含），网格若按 max-content 计算会塌成 0。 */
-  .computer-stage { display: grid; grid-template-columns: minmax(0, 570px); align-content: center; justify-content: center; min-height: 100svh; padding: 24px 12px; }
+  /* 显式轨道：.computer 用了容器查询（尺寸包含），网格若按 max-content 计算会塌成 0。
+     横屏（844×390 这类）高度不够时，570px 宽的整机比视口还高，上下会被裁掉。
+     所以列宽同时受高度约束：整机高约 0.702×宽度，留 48px 边距后换算成 1.38 的倒数。 */
+  .computer-stage { display: grid; grid-template-columns: minmax(0, min(570px, calc((100svh - 48px) * 1.38))); align-content: center; justify-content: center; min-height: 100svh; padding: 24px 12px; }
   .computer { display: block; flex: none; width: 100%; container-type: inline-size; }
   .monitor { display: block; flex: none; padding: 3.05cqw 3.43cqw 0; border: 1px solid #9e9d8e; border-radius: 2.6cqw 2.6cqw 2.05cqw 2.05cqw; }
   .screen-rim { display: block; padding: 1.11cqw; border-radius: 1.57cqw; }
